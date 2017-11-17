@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>webpack demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preload" href="main.app.js" as="script">
+<!--
+  <link rel="preload" href="common.app.js" as="script">
+-->
+
+  <link rel='stylesheet' href='style.css' />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+</head>
+
+<body>
+
+  <!--
+<script "text/javascript" src='common.prod.app.js'></script>
+
+<script "text/javascript" src='common.app.js'></script>
+-->
+<script "text/javascript" src='main.app.js'></script>
+
+  <script type="text/javascript">
+  /*
+  setTimeout(function() {
+    var documentFragment = document.createDocumentFragment();
+
+    var css = document.createElement('link');
+    css.href = 'https://use.fontawesome.com/d6a1d46436.css';
+    css.rel = 'stylesheet';
+    css.type = 'text/css';
+
+    var script2=document.createElement('script');
+    script2.src = 'app.js';
+    script2.type = "text/javascript";
+
+
+var body=document.documentElement||document.body;
+      body.appendChild(script2);
+
+
+
+    documentFragment.appendChild(css);
+
+
+
+    document.getElementsByTagName('head')[0].appendChild(documentFragment);
+
+
+
+  },0)
+*/
+  </script>
+
+
+  <!--
+  http://www.templatemonsterpreview.com/65331.html
+  -->
+</body>
+
+</html>

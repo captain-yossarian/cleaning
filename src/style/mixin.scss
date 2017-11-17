@@ -1,0 +1,105 @@
+
+$breakpoints:(
+'zerro':0px,
+'sm-phone':320px,
+'md-phone':480px,
+'lg-phone':640px,
+
+'sm-tablet':768px,
+'md-tablet':1024px,
+
+'sm-pc':1280px,
+'md-pc':1690px,
+'lg-pc':1920px
+);
+
+@mixin media($min,$max){
+  @media (min-width:map-get($breakpoints,$min) + 1) and (max-width:map-get($breakpoints,$max)){
+    @content;
+  }
+}
+@mixin clearfix {
+  clear: both;
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+@mixin navigation-height-fix{
+  min-height: 30px;
+  font-size:20px;
+  font-weight: 400;
+  line-height:30px;
+  padding:15px 0;
+}
+@mixin linkReset {
+  a {
+    &:active,
+    &:hover,
+    &:link,
+    &:visited {
+      @content;
+    }
+  }
+}
+
+
+@mixin coordinates ($rows,$cells,$height,$quantity){
+  $left :('0');
+  $koef:100 / $cells;
+  @for $i from 1 through ($cells - 1){
+    $tmp:(100 * $i)+'%';
+    $left: join($left,$tmp);
+  }
+  $coordinates: ();
+  @for $i from 1 through $rows{
+   @for $j from 1 through $cells {
+     $tmp: $i,$j;
+     $coordinates: join($coordinates,$tmp,space);
+   }
+  }
+
+$top:0;
+  @for $x from 1 through $quantity {
+   &.item-#{$x} {
+     will-change:transform;
+     //transition: all 1s ease;
+     $increment: $x * 2;
+     @if (($x - 1) % $cells ==0) and ($x > 1) {
+       $top:$top + 1;
+     }
+     background-image: url('./img/#{$x}.jpg');
+     background-position: 50% 50%;
+     background-size: cover;
+     transform:translate3d(unquote(nth($left,nth($coordinates,$increment))),$height * $top,0);
+     width:100% / $cells;
+   }
+  }
+}
+
+
+
+@mixin circleDiagram($list) {
+   @for $i from 1 through 3{
+    @keyframes before-#{$i} {
+      to {
+        transform: rotate(PercentToDegree(nth($list,$i)));
+      }
+    }
+    @keyframes after-#{$i} {
+      @if nth($list,$i) > 50 {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: rotate(PercentToDegree(normalize(nth($list,$i))));
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
