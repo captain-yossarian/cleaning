@@ -99,5 +99,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [new ExtractTextPlugin({filename: "style.css", allChunks: true}),new LodashModuleReplacementPlugin()]
+  /*Lodash plugin does not work korectly, bug with _.filter, new LodashModuleReplacementPlugin()
+   *github issue=> https://github.com/gajus/react-css-modules/issues/131*/
+  plugins: [new ExtractTextPlugin({filename: "style.css", allChunks: true})]
 }
