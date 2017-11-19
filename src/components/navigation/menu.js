@@ -1,4 +1,4 @@
-export var Menu = [
+export var menu = [
   {
     name: 'Home'
   }, {

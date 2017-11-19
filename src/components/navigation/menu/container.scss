@@ -1,0 +1,44 @@
+.main[deep='0'] {
+  color: black;
+  position: relative;
+  display: block;
+
+  & > .item {
+    width: 16.6666%;
+    display: block;
+    display: inline-block;
+    border: 1px solid red;
+    text-align: center;
+  }
+}
+
+.container {
+  display: none;
+}
+.blur{
+  width:auto;
+}
+.list.hover {
+  position: relative;
+    & > .container {
+      display: block;
+      position: absolute;
+      border: 1px solid black;
+      width: 100%;
+
+      .container {
+        left: -100%;
+        top: 0;
+        transform: translateX(-5px);
+
+        &::after {
+          content: '';
+          width: 10px;
+          height: 100%;
+          top: 0;
+          position: absolute;
+          right: -5px;
+        }
+      }
+    }
+}
