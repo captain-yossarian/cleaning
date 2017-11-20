@@ -15,24 +15,16 @@ class NavigationItem {
       this.element.nextElementSibling.children[0].children[0].focus()
     }, 0)
   }
-  step(direction) {
-    var side = {
-      'down': 'nextElementSibling',
-      'up': 'previousElementSibling'
-    }
-    var ref = this.element.parentElement;
-    var refSideDirection=ref[side[direction]];
-    var refParentChildren=ref.parentElement.children;
-
-    if (refSideDirection !== null) {
-      refSideDirection.children[0].focus()
-    } else {
-      refParentChildren[direction == 'down'  ? 0 : refParentChildren.length - 1].children[0].focus()
-    }
+  closeSubMenu(){
+    setTimeout(() => {
+      console.log( 'prev', this.element)
+      //this.element.previousSibling.children[0].focus()
+    }, 0)
   }
 
+
   focusTo(direction) {
-    console.log('getAttribute', this.element.parentElement.getAttribute('deep'))
+    //console.log('getAttribute', this.element.parentElement.getAttribute('deep'))
     var side = {
       'right': 'nextElementSibling',
       'left': 'previousElementSibling',
@@ -42,7 +34,7 @@ class NavigationItem {
     var ref=this.element.parentElement;
     var refSideDirection=ref[side[direction]];
     var refParentChildren=ref.parentElement.children;
-console.log('direction')
+
 
   //  if (ref.getAttribute('deep') == '0' || ref.parentElement.getAttribute('deep') == '0') {
       if(refSideDirection!==null){
@@ -68,10 +60,11 @@ class Container extends React.Component {
       activeElement: new NavigationItem(element)
     }, this.getElement)
   }
-  getElement() {}
+shouldComponentUpdate(nextProps, nextState){
+  return false;
+}
   test() {}
   keyHandler(e) {
-    console.log('ping', this.state.activeElement)
     switch (e.keyCode) {
       case 13: //Enter
       case 32: //Space
@@ -103,6 +96,10 @@ class Container extends React.Component {
     e.preventDefault();
     this.state.activeElement.openSubMenu();
   }
+  closeSubMenu(e){
+        e.preventDefault();
+    this.state.activeElement.closeSubMenu();
+  }
   render() {
     var {deep} = this.props;
 
@@ -111,10 +108,10 @@ class Container extends React.Component {
         deep: deep,
         setElement: this.setElement.bind(this),
         keyHandler: this.keyHandler.bind(this),
-        openMenu: this.openMenu.bind(this)
+        openMenu: this.openMenu.bind(this),
+        closeSubMenu:this.closeSubMenu.bind(this)
       })
     })
-
     return (
       <ul onFocus={e => this.test()} deep={deep} role={deep === 0
         ? 'menubar'

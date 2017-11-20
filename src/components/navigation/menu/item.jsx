@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import SubMenu from './sub/submenu.jsx';
 import SimpleLink from './simplelink.jsx';
 
-
+/**
+you need to hoist logic from submenu and simple link to Item, because left/right dont work on simple link, you cant to close
+fly down menu if first link is just simple link
+*/
 class Item extends React.PureComponent {
   constructor(props) {
     super(props)

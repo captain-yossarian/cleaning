@@ -6,7 +6,7 @@ import CSSModules from 'react-css-modules';
 import styles from './container.scss';
 import Link from '../../global/link/link.jsx';
 
-class SimpleLink extends React.PureComponent{
+class SimpleLink extends React.Component{
   constructor(props) {
     super(props)
   }
@@ -16,7 +16,9 @@ class SimpleLink extends React.PureComponent{
   setElement(e){
   this.props.setElement(e.target)
   }
-
+  shouldComponentUpdate(nextProps, nextState){
+    return false;
+  }
   render(){
       var {name,deep}=this.props;
     return(

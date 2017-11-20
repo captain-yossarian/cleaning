@@ -12,61 +12,7 @@ class SubMenu extends React.PureComponent {
       expanded: false
     }
   }
-  componentDidMount() {
-    class NavigationItem {
-      constructor(element) {
-        this.element = element;
-      }
-      setElement(element) {
-        this.element = element;
-      }
-      openSubMenu() {
-        setTimeout(() => {
-          this.element.nextElementSibling.children[0].children[0].focus()
-        }, 0)
-      }
-      step(direction) {
-        if (direction === 'down') {
-          if(!!this.element === true){
-              this.element.parentElement.nextElementSibling.children[0].focus()
-          }
-          else if(!!this.element === false) {
-            setTimeout(() => {
-              this.element.parentElement.parentElement.children[0].children[0].focus()
-            }, 0)
-          }
-        }
-
-        if (direction === 'up') {
-          this.element.parentElement.previousElementSibling.children[0].focus()
-          if (this.element.parentElement.previousElementSibling === null) {
-          }
-        }
-
-      }
-
-      stepUp() {}
-      /*
-      stepUp() {
-        var collection = Array.prototype.slice.call(this.element.parentElement.children);
-        var current = collection.filter(elem => {
-          return elem.getAttribute('aria-expanded') == 'true';
-        })
-        this.element = current[0];
-        return this
-      }
-      */
-      focusTo(direction) {
-        this.element = direction === 'right'
-          ? this.element.parentElement.nextSibling.childNodes[0]
-          : this.element.parentElement.previousSibling.childNodes[0];
-
-        this.element.focus()
-        return this
-      }
-    }
-    this.currentItem = new NavigationItem(this.element);
-  }
+  componentDidMount() {}
 
   toggleState(e) {
     e.stopPropagation()
@@ -86,17 +32,19 @@ class SubMenu extends React.PureComponent {
 
         break;
       case 39: //Right
-
-
-
+      console.log('Right')
+      e.preventDefault();
+      this.toggleState(e);
+    //  this.props.closeSubMenu(e);
         break;
       case 37: //Left
+      e.preventDefault();
+      this.toggleState(e);
+      this.props.openMenu(e);
 
         break;
 
       case 40: //Down
-
-
 
         break;
 
@@ -110,20 +58,35 @@ class SubMenu extends React.PureComponent {
   focusHandler(e) {
     this.currentItem.setElement(e.target)
   }
-  keyHandler(e){
-    this.insideLogic(e)
-    this.props.keyHandler(e)
+  keyHandler(e) {
+
+    if(e.keyCode==39){
+      this.insideLogic(e)
+    }else{
+      console.log('else')
+        this.insideLogic(e)
+      this.props.keyHandler(e)
+    }
+
   }
 
+  blurHandler(e) {
+
+    setTimeout(() => {
+      if (!this.liElement.contains(document.activeElement)) {
+          console.log('blur')
+        this.setState({expanded: false});
+      }
+    }, 2000)
+  }
 
   render() {
     var {deep, content, name} = this.props;
     return (
       <li deep={deep} styleName={`item list ${this.state.expanded
         ? 'hover'
-        : 'blur'}`} onClick={e => this.toggleState(e)}    role='menuitem' aria-haspopup={true} aria-expanded={this.state.expanded}>
-        <CustomLink name={name} deep={deep} setElement={this.props.setElement} keyHandler={e=>this.keyHandler(e)}/>
-        {content}
+        : 'blur'}`} onClick={e => this.toggleState(e)} role='menuitem' aria-haspopup={true} aria-expanded={this.state.expanded}  onBlur={e => this.blurHandler(e)} ref={liElement => this.liElement = liElement}>
+        <CustomLink name={name} deep={deep} setElement={this.props.setElement} keyHandler={e => this.keyHandler(e)}/> {content}
       </li>
     )
   }

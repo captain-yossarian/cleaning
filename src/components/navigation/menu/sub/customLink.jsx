@@ -21,6 +21,8 @@ class CustomLink extends React.PureComponent {
 
 
   render() {
+    if(this.props.deep==0){
+    }
     var deep=this.props.deep===0?0:-1;
     return (
       <a href="#" role='menuitem'
