@@ -9,13 +9,26 @@ import styles from './customlink.scss';
 class CustomLink extends React.PureComponent {
   constructor(props) {
     super(props)
+
   }
-  clickHandler(e){
-    e.preventDefault();
+  setElement(e){
+
+    this.props.setElement(e.target)
   }
+  keyHandler(e){
+    this.props.keyHandler(e)
+  }
+
+
   render() {
+    var deep=this.props.deep===0?0:-1;
     return (
-      <a href="#" role='menuitem'  onClick={e=>this.clickHandler(e)} styleName='link'>{this.props.name}</a>
+      <a href="#" role='menuitem'
+        tabIndex={deep}
+        onFocus={e=>this.setElement(e)}
+        onClick={e=>e.preventDefault()}
+        onKeyDown={e => this.keyHandler(e)}
+        styleName='link'>{this.props.name}</a>
     )
   }
 }

@@ -13,17 +13,18 @@ class Navigation extends React.PureComponent {
     super(props);
   }
   menuGenerator(menu, deep = -1) {
-    deep++;
+    deep+=1;
     return (
       <Container deep={deep}>
         {menu.map((elem, index) =>
         elem.sub
           ? <Item key={index} content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
-          : <Item key={index}  name={elem.name}/>)}
+          : <Item key={index} deep={deep}  name={elem.name}/>)}
       </Container>
     )
   }
   render() {
+
     return (
       <nav role='navigation' aria-labelledby="mainmenu">
         <h2 id="mainmenu" styleName="visuallyhidden">Main Menu</h2>
