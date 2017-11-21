@@ -8,6 +8,15 @@ import {menu} from './menu.js';
 import Container from './menu/container.jsx';
 import Item from './menu/item.jsx';
 
+
+
+/**
+ * https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html#
+ * https://www.w3.org/TR/wai-aria-practices/#menu
+ * TODO
+ * Escape/Home/End logic
+ *
+ */
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
@@ -18,9 +27,11 @@ class Navigation extends React.Component {
   }
 
   onFocusExpanded(){
-    this.setState({
-        onFocusExpanded:true
-    },this.test)
+    this.setState(prevState=>{
+    return{
+       onFocusExpanded:!prevState.onFocusExpanded
+    }
+    })
   }
   test(){
         console.log('Navigation::',this.state)
@@ -39,7 +50,7 @@ class Navigation extends React.Component {
   render() {
 
     return (
-      <nav role='navigation' aria-labelledby="mainmenu">
+      <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>{this.test(e)}}>
         <h2 id="mainmenu" styleName="visuallyhidden">Main Menu</h2>
         {this.menuGenerator(menu)}
       </nav>
