@@ -12,8 +12,10 @@ class CustomLink extends React.Component {
 
   }
   setElement(e){
+    console.log('custom focus')
 
     this.props.setElement(e.target,this.props.deep)
+    
   }
   keyHandler(e){
     this.props.keyHandler(e)
@@ -23,6 +25,7 @@ class CustomLink extends React.Component {
     if(this.props.deep==0){
     }
     var deep=this.props.deep===0?0:-1;
+
     return (
       <a href="#" role='menuitem'
         tabIndex={deep}

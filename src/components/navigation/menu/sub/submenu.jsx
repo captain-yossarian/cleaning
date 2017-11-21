@@ -18,7 +18,7 @@ class SubMenu extends React.Component {
 
   toggleState(e) {
     e.stopPropagation()
-    e.stopPropagation()
+
     this.setState(prevState => {
       return {
         expanded: !prevState.expanded
@@ -66,16 +66,27 @@ class SubMenu extends React.Component {
   componentWillReceiveProps(props){
 
     if(props.onFocusExpanded==true){
+    //  this.focusHandler()
 
 
     }
 
   }
 
+componentWillUpdate(nextProps, nextState){
 
-focusHandler(e){
-this.props.onFocusExpanded==true&&console.log('focus')
-  //  this.toggleState(e)
+
+}
+shouldComponentUpdate(nextProps, nextState){
+    return true
+}
+focusHandler(){
+  setTimeout(()=>{
+     console.log('CustomLink',this.props)
+     if(this.props.onFocusExpanded&&this.props.deep==0){
+         this.setState({expanded: true});
+     }
+  },0)
 }
 
   blurHandler(e) {
@@ -92,16 +103,16 @@ this.props.onFocusExpanded==true&&console.log('focus')
     return (
       <li
         deep={deep}
-        data-expanded={onFocusExpanded}
+
         styleName={`item list ${this.state.expanded ? 'hover': 'blur'} `}
         onClick={e => this.toggleState(e)}
         role='menuitem'
         aria-haspopup={true}
         aria-expanded={this.state.expanded}
         onFocus={e=>this.focusHandler(e)}
-        onBlur={e => this.blurHandler(e)}  
+        onBlur={e => this.blurHandler(e)}
         ref={liElement => this.liElement = liElement}>
-        <CustomLink name={name} deep={deep} setElement={this.props.setElement} keyHandler={e => this.keyHandler(e)}/> {content}
+        <CustomLink   expanded={onFocusExpanded} name={name} deep={deep} setElement={this.props.setElement} keyHandler={e => this.keyHandler(e)}/> {content}
       </li>
     )
   }
