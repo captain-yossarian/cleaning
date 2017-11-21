@@ -6,19 +6,18 @@ import styles from './customlink.scss';
 
 
 
-class CustomLink extends React.PureComponent {
+class CustomLink extends React.Component {
   constructor(props) {
     super(props)
 
   }
   setElement(e){
 
-    this.props.setElement(e.target)
+    this.props.setElement(e.target,this.props.deep)
   }
   keyHandler(e){
     this.props.keyHandler(e)
   }
-
 
   render() {
     if(this.props.deep==0){

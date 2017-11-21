@@ -11,19 +11,28 @@ class SimpleLink extends React.Component{
     super(props)
   }
   keyHandler(e) {
-    this.props.keyHandler(e)
+    if(this.props.deep>0&&e.keyCode==39){
+      this.props.backToRoot('right')
+    }else if(this.props.deep==1&&e.keyCode==37){
+        this.props.backToRoot('left')
+    }
+    else{
+        this.props.keyHandler(e)
+    }
   }
   setElement(e){
-  this.props.setElement(e.target)
+  this.props.setElement(e.target,this.props.deep)
   }
-  shouldComponentUpdate(nextProps, nextState){
-    return false;
-  }
+
   render(){
       var {name,deep}=this.props;
     return(
-      <li styleName='item' role='none' onFocus={e=>this.setElement(e)} onKeyDown={e => this.keyHandler(e)} >
-            <Link role='menuitem' tabIndex={deep==0?0:-1}   to={name==='Home'?'/':'/'+name}>{name}</Link>
+      <li
+        styleName='item'
+        role='none'
+        onFocus={e=>this.setElement(e)}
+        onKeyDown={e => this.keyHandler(e)} >
+            <Link role='menuitem' aria-haspopup={false} tabIndex={deep==0?0:-1}   to={name==='Home'?'/':'/'+name}>{name}</Link>
       </li>
     )
   }

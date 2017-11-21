@@ -1,6 +1,9 @@
 export var menu = [
   {
-    name: 'Home'
+    name: 'Home',
+    sub:[
+      {name:'hello'}
+    ]
   }, {
     name: 'About'
   }, {
@@ -32,7 +35,11 @@ export var menu = [
       }
     ]
   }, {
-    name: 'Blog'
+    name: 'Blog',
+    sub:[
+      {name:'kiwi'},
+      {name:'banana'}
+    ]
   }, {
     name: 'Contacts'
   }, {

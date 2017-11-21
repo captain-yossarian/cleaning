@@ -5,87 +5,102 @@ import CSSModules from 'react-css-modules';
 import styles from '../container.scss';
 import CustomLink from './customLink.jsx';
 
-class SubMenu extends React.PureComponent {
+class SubMenu extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      expanded: false
+      expanded: false,
+      focusExpanded:null
     }
   }
-  componentDidMount() {}
+
+
 
   toggleState(e) {
+    e.stopPropagation()
     e.stopPropagation()
     this.setState(prevState => {
       return {
         expanded: !prevState.expanded
       }
     })
+
   }
-  insideLogic(e) {
-    switch (e.keyCode) {
-      case 13: //Enter
-      case 32: //Space
-        e.preventDefault();
-        this.toggleState(e);
-        this.props.openMenu(e);
-
+  insideLogic(e, level) {
+    switch (level) {
+      case 0:
+        switch (e.keyCode) {
+          case 13: //Enter
+          case 32: //Space
+            e.preventDefault();
+            this.toggleState(e);
+            this.props.openMenu(e);
+            break;
+        }
         break;
-      case 39: //Right
-      console.log('Right')
-      e.preventDefault();
-      this.toggleState(e);
-    //  this.props.closeSubMenu(e);
+      default:
+        switch (e.keyCode) {
+          case 13: //Enter
+          case 32: //Space
+          case 39: // Right
+            e.preventDefault();
+            this.toggleState(e);
+            this.props.openMenu(e);
+            break;
+        }
         break;
-      case 37: //Left
-      e.preventDefault();
-      this.toggleState(e);
-      this.props.openMenu(e);
-
-        break;
-
-      case 40: //Down
-
-        break;
-
-      case 38: //Up
-        e.preventDefault();
-
-        break;
-
     }
+
   }
   focusHandler(e) {
     this.currentItem.setElement(e.target)
   }
   keyHandler(e) {
+    /**
+     * If keyPress event occur on top level (deep===0)
+     * document.activeElement(:focus) is on the top level navigation, left/right move to, up/bottom must to open the sub menu
+     */
+    this.insideLogic(e, this.props.deep)
+    this.props.keyHandler(e)
+  }
+  componentWillReceiveProps(props){
 
-    if(e.keyCode==39){
-      this.insideLogic(e)
-    }else{
-      console.log('else')
-        this.insideLogic(e)
-      this.props.keyHandler(e)
+    if(props.onFocusExpanded==true){
+
+
     }
 
   }
 
-  blurHandler(e) {
 
+focusHandler(e){
+this.props.onFocusExpanded==true&&console.log('focus')
+  //  this.toggleState(e)
+}
+
+  blurHandler(e) {
     setTimeout(() => {
-      if (!this.liElement.contains(document.activeElement)) {
-          console.log('blur')
+      if (!this.liElement.children[1].contains(document.activeElement)) {
         this.setState({expanded: false});
       }
-    }, 2000)
+    }, 0)
   }
 
+
   render() {
-    var {deep, content, name} = this.props;
+    var {deep, content, name,onFocusExpanded} = this.props;
     return (
-      <li deep={deep} styleName={`item list ${this.state.expanded
-        ? 'hover'
-        : 'blur'}`} onClick={e => this.toggleState(e)} role='menuitem' aria-haspopup={true} aria-expanded={this.state.expanded}  onBlur={e => this.blurHandler(e)} ref={liElement => this.liElement = liElement}>
+      <li
+        deep={deep}
+        data-expanded={onFocusExpanded}
+        styleName={`item list ${this.state.expanded ? 'hover': 'blur'} `}
+        onClick={e => this.toggleState(e)}
+        role='menuitem'
+        aria-haspopup={true}
+        aria-expanded={this.state.expanded}
+        onFocus={e=>this.focusHandler(e)}
+        onBlur={e => this.blurHandler(e)}  
+        ref={liElement => this.liElement = liElement}>
         <CustomLink name={name} deep={deep} setElement={this.props.setElement} keyHandler={e => this.keyHandler(e)}/> {content}
       </li>
     )
