@@ -10,11 +10,9 @@ class SubMenu extends React.Component {
     super(props)
     this.state = {
       expanded: false,
-      focusExpanded:null
+      focusExpanded: null
     }
   }
-
-
 
   toggleState(e) {
     e.stopPropagation()
@@ -24,18 +22,20 @@ class SubMenu extends React.Component {
         expanded: !prevState.expanded
       }
     })
-
+  }
+  containerOpenMenu(e) {
+    e.preventDefault();
+    this.toggleState(e);
+    this.props.openMenu(e);
   }
   insideLogic(e, level) {
+
     switch (level) {
       case 0:
         switch (e.keyCode) {
           case 13: //Enter
           case 32: //Space
-            e.preventDefault();
-            this.toggleState(e);
-            this.props.openMenu(e);
-            break;
+            this.containerOpenMenu(e);break;
         }
         break;
       default:
@@ -43,10 +43,7 @@ class SubMenu extends React.Component {
           case 13: //Enter
           case 32: //Space
           case 39: // Right
-            e.preventDefault();
-            this.toggleState(e);
-            this.props.openMenu(e);
-            break;
+            this.containerOpenMenu(e);break;
         }
         break;
     }
@@ -63,32 +60,14 @@ class SubMenu extends React.Component {
     this.insideLogic(e, this.props.deep)
     this.props.keyHandler(e)
   }
-  componentWillReceiveProps(props){
 
-    if(props.onFocusExpanded==true){
-    //  this.focusHandler()
-
-
-    }
-
+  focusHandler() {
+    setTimeout(() => {
+      if (this.props.onFocusExpanded && this.props.deep == 0) {
+        this.setState({expanded: true});
+      }
+    }, 0)
   }
-
-componentWillUpdate(nextProps, nextState){
-
-
-}
-shouldComponentUpdate(nextProps, nextState){
-    return true
-}
-focusHandler(){
-  setTimeout(()=>{
-     console.log('CustomLink',this.props)
-     if(this.props.onFocusExpanded&&this.props.deep==0){
-         this.setState({expanded: true});
-     }
-  },0)
-}
-
   blurHandler(e) {
     setTimeout(() => {
       if (!this.liElement.children[1].contains(document.activeElement)) {
@@ -97,25 +76,15 @@ focusHandler(){
     }, 0)
   }
 
-
   render() {
-    var {deep, content, name,onFocusExpanded} = this.props;
+    var {deep, content, name, onFocusExpanded} = this.props;
     return (
-      <li
-        deep={deep}
-
-        styleName={`item list ${this.state.expanded ? 'hover': 'blur'} `}
-        onClick={e => this.toggleState(e)}
-        role='menuitem'
-        aria-haspopup={true}
-        aria-expanded={this.state.expanded}
-        onFocus={e=>this.focusHandler(e)}
-        onBlur={e => this.blurHandler(e)}
-        ref={liElement => this.liElement = liElement}>
-        <CustomLink   expanded={onFocusExpanded} name={name} deep={deep} setElement={this.props.setElement} keyHandler={e => this.keyHandler(e)}/> {content}
+      <li deep={deep} styleName={`item list ${this.state.expanded
+        ? 'hover'
+        : 'blur'} `} onClick={e => this.toggleState(e)} role='menuitem' aria-haspopup={true} aria-expanded={this.state.expanded} onFocus={e => this.focusHandler(e)} onBlur={e => this.blurHandler(e)} ref={liElement => this.liElement = liElement}>
+        <CustomLink expanded={onFocusExpanded} name={name} deep={deep} setElement={this.props.setElement} keyHandler={e => this.keyHandler(e)}/> {content}
       </li>
     )
   }
 }
 export default CSSModules(SubMenu, styles, {allowMultiple: true})
-// /onClick={e => this.toggleState(e)}

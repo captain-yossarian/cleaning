@@ -12,77 +12,66 @@ class NavigationItem {
   }
   openSubMenu() {
     setTimeout(() => {
-      this.element.nextElementSibling.children[0].children[0].focus()
+      this.element.nextElementSibling.firstChild.firstChild.focus()
     }, 0)
   }
-  closeSubMenu() {
-    setTimeout(() => {
-      //this.element.previousSibling.children[0].focus()
-    }, 0)
+  nearestUlParent(element, parent = element.parentElement) {
+    return element.nodeName == 'UL'
+      ? element
+      : this.nearestUlParent(element.parentElement)
   }
+  rootParent(element, parent = element.parentElement) {
+   return parent.getAttribute('deep') == 0
+     ? parent
+     : this.rootParent(parent)
+ }
+
+  goTo(key) {
+    if (key == 35) {
+      console.log('KEY', this.element.parentElement.parentElement)
+      this.nearestUlParent(this.element).lastChild.firstChild.focus()
+    } else {
+        this.nearestUlParent(this.element).firstChild.firstChild.focus()
+    }
+  }
+
   focusFromSub(deep) {
     if (deep == 1) {
-      this.element.parentElement.parentElement.previousElementSibling.parentElement.previousElementSibling.children[0].focus()
+        this.nearestUlParent(this.element).previousElementSibling.parentElement.previousElementSibling.children[0].focus()
     } else {
-      this.element.parentElement.parentElement.previousElementSibling.focus()
+        this.nearestUlParent(this.element).previousElementSibling.focus()
     }
 
   }
   backToRoot(direction) {
+    console.log('bacToRoot')
     var side = {
       'right': 'nextElementSibling',
       'left': 'previousElementSibling'
     }
-
-    function findRootParent(element, parent = element.parentElement) {
-      return parent.getAttribute('deep') == 0
-        ? parent
-        : findRootParent(parent)
-    }
-    var result = findRootParent(this.element)
-
-    var resultSideDirection = result[side[direction]];
-
-    if (resultSideDirection !== null) {
-      result[side[direction]].children[0].focus()
-    } else {
-      result.parentElement.children[direction == 'right'
-          ? 0
-          : result.parentElement.children.length - 1].children[0].focus()
-    }
-
-  }
-
-  focusTo(direction) {
-    //console.log('getAttribute', this.element.parentElement.getAttribute('deep'))
-    var side = {
-      'right': 'nextElementSibling',
-      'left': 'previousElementSibling',
-      'down': 'nextElementSibling',
-      'up': 'previousElementSibling'
-    }
-    /**
-     * ActiveElement is on the top level navigation, left/right move to, up/bottom must to open the sub menu
-     *
-     *
-     */
-
-    var ref = this.element.parentElement;
+    var ref = this.rootParent(this.element)
     var refSideDirection = ref[side[direction]];
     var refParentChildren = ref.parentElement.children;
-
-    //  if (ref.getAttribute('deep') == '0' || ref.parentElement.getAttribute('deep') == '0') {
     if (refSideDirection !== null) {
-      refSideDirection.children[0].focus()
+      refSideDirection.firstChild.focus()
     } else {
-      refParentChildren[direction == 'right' || direction == 'down'
-          ? 0
-          : refParentChildren.length - 1].children[0].focus()
+      refParentChildren[direction == 'right' ? 0 : refParentChildren.length - 1].firstChild.focus()
     }
-
-    //    }
   }
-
+  focusTo(direction) {
+    var side = {
+      'right': 'nextElementSibling',
+      'left': 'previousElementSibling'
+    }
+    var ref = this.element.parentElement;//difference
+    var refSideDirection = ref[side[direction]];
+    var refParentChildren = ref.parentElement.children;
+    if (refSideDirection !== null) {
+      refSideDirection.firstChild.focus()
+    } else {
+      refParentChildren[direction == 'right'? 0 : refParentChildren.length - 1].firstChild.focus()
+    }
+  }
 }
 
 class Container extends React.Component {
@@ -100,7 +89,11 @@ class Container extends React.Component {
   }
 
   keyHandler(e) {
-    if (this.state.deep == 0) {
+    if (e.keyCode == 35 || e.keyCode == 36) {
+      e.preventDefault();
+      this.state.activeElement.goTo(e.keyCode)
+
+    } else if (this.state.deep == 0) {
       /**
        * In this case we move on the top (root) level navigation
        */
@@ -138,31 +131,16 @@ class Container extends React.Component {
        *
        */
       switch (e.keyCode) {
-        case 13: //Enter
-        case 32: //Space
-
-          e.preventDefault();
-
-          break;
-
-        case 39: //Right
-          e.preventDefault();
-
-          // this.state.activeElement.focusTo('right');
-          break;
         case 37: //Left
-          // e.preventDefault();
           this.state.activeElement.focusFromSub(this.state.deep);
           break;
-
         case 40: //Down
           e.preventDefault();
-          this.state.activeElement.focusTo('down');
+          this.state.activeElement.focusTo('right');
           break;
-
         case 38: //Up
           e.preventDefault();
-          this.state.activeElement.focusTo('up');
+          this.state.activeElement.focusTo('left');
           break;
       }
     }

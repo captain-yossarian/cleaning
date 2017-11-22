@@ -34,7 +34,9 @@ class Navigation extends React.Component {
     })
   }
   test(){
-        console.log('Navigation::',this.state)
+  }
+  clickHandler(e){
+    console.log('click')
   }
   menuGenerator(menu, deep = -1) {
     deep+=1;
@@ -42,7 +44,7 @@ class Navigation extends React.Component {
       <Container deep={deep} onFocusExpanded={this.onFocusExpanded} >
         {menu.map((elem, index) =>
         elem.sub
-          ? <Item key={index} onFocusExpanded={this.state.onFocusExpanded}  content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
+          ? <Item key={index}  onFocusExpanded={this.state.onFocusExpanded}  content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
           : <Item key={index} deep={deep}  name={elem.name}/>)}
       </Container>
     )
@@ -50,10 +52,13 @@ class Navigation extends React.Component {
   render() {
 
     return (
-      <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>{this.test(e)}}>
+      <div>
+      <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>{this.test(e)}} onClick={e=>this.clickHandler(e)}>
         <h2 id="mainmenu" styleName="visuallyhidden">Main Menu</h2>
         {this.menuGenerator(menu)}
       </nav>
+      <a href="#">TEST</a>
+    </div>
     )
   }
 }

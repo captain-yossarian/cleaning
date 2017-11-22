@@ -9,27 +9,30 @@ import styles from './customlink.scss';
 class CustomLink extends React.Component {
   constructor(props) {
     super(props)
+    this.state={
+      tabindex:-1
+    }
 
   }
   setElement(e){
-    console.log('custom focus')
-
     this.props.setElement(e.target,this.props.deep)
-    
+  this.setState({tabindex:0})
+  }
+  getState(){
+    console.log('STATE',this.state.tabindex)
   }
   keyHandler(e){
+    if(e.keyCode==37||e.keyCode==38||e.keyCode==39||e.keyCode==40){
+        this.setState({tabindex:-1})
+    }
     this.props.keyHandler(e)
   }
-
   render() {
-    if(this.props.deep==0){
-    }
-    var deep=this.props.deep===0?0:-1;
-
     return (
       <a href="#" role='menuitem'
-        tabIndex={deep}
+        tabIndex={this.props.deep==0?this.state.tabindex:-1}
         onFocus={e=>this.setElement(e)}
+        onBlur={e=>{this.getState(e)}}
         onClick={e=>e.preventDefault()}
         onKeyDown={e => this.keyHandler(e)}
         styleName='link'>{this.props.name}</a>

@@ -1,9 +1,7 @@
 export var menu = [
   {
-    name: 'Home',
-    sub:[
-      {name:'hello'}
-    ]
+    name: 'Home'
+
   }, {
     name: 'About'
   }, {
