@@ -27,12 +27,11 @@ class NavigationItem {
  }
 
   goTo(key) {
-    if (key == 35) {
-      console.log('KEY', this.element.parentElement.parentElement)
-      this.nearestUlParent(this.element).lastChild.firstChild.focus()
-    } else {
-        this.nearestUlParent(this.element).firstChild.firstChild.focus()
+    var sides={
+      [35]:'lastChild',
+      [36]:'firstChild'
     }
+    this.nearestUlParent(this.element)[sides[key]].firstChild.focus()
   }
 
   focusFromSub(deep) {
@@ -41,29 +40,14 @@ class NavigationItem {
     } else {
         this.nearestUlParent(this.element).previousElementSibling.focus()
     }
+  }
 
-  }
-  backToRoot(direction) {
-    console.log('bacToRoot')
+  focusTo(direction,toRoot) {
     var side = {
       'right': 'nextElementSibling',
       'left': 'previousElementSibling'
     }
-    var ref = this.rootParent(this.element)
-    var refSideDirection = ref[side[direction]];
-    var refParentChildren = ref.parentElement.children;
-    if (refSideDirection !== null) {
-      refSideDirection.firstChild.focus()
-    } else {
-      refParentChildren[direction == 'right' ? 0 : refParentChildren.length - 1].firstChild.focus()
-    }
-  }
-  focusTo(direction) {
-    var side = {
-      'right': 'nextElementSibling',
-      'left': 'previousElementSibling'
-    }
-    var ref = this.element.parentElement;//difference
+    var ref =toRoot ? this.rootParent(this.element): this.element.parentElement;
     var refSideDirection = ref[side[direction]];
     var refParentChildren = ref.parentElement.children;
     if (refSideDirection !== null) {
@@ -87,7 +71,6 @@ class Container extends React.Component {
   setElement(element, deep) {
     this.setState({activeElement: new NavigationItem(element), deep: deep})
   }
-
   keyHandler(e) {
     if (e.keyCode == 35 || e.keyCode == 36) {
       e.preventDefault();
@@ -146,16 +129,10 @@ class Container extends React.Component {
     }
 
   }
-  focusTo(to) {
-
-    this.state.activeElement.focusTo(to);
+  focusTo(to,toRoot) {
+    this.state.activeElement.focusTo(to,toRoot);
+    toRoot&&this.props.onFocusExpanded()
   }
-  backToRoot(direction) {
-    this.state.activeElement.backToRoot(direction)
-    this.props.onFocusExpanded()
-
-  }
-
   openMenu(e) {
     e.preventDefault();
     this.state.activeElement.openSubMenu();
@@ -175,8 +152,7 @@ class Container extends React.Component {
         keyHandler: this.keyHandler.bind(this),
         openMenu: this.openMenu.bind(this),
         closeSubMenu: this.closeSubMenu.bind(this),
-        focusTo: this.focusTo.bind(this),
-        backToRoot: this.backToRoot.bind(this)
+        focusTo: this.focusTo.bind(this)
       })
     })
 

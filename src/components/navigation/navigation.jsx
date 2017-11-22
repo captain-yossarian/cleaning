@@ -36,7 +36,6 @@ class Navigation extends React.Component {
   test(){
   }
   clickHandler(e){
-    console.log('click')
   }
   menuGenerator(menu, deep = -1) {
     deep+=1;
@@ -49,11 +48,13 @@ class Navigation extends React.Component {
       </Container>
     )
   }
+  handleBlur(){
+  }
   render() {
 
     return (
       <div>
-      <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>{this.test(e)}} onClick={e=>this.clickHandler(e)}>
+      <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>{this.test(e)}} onClick={e=>this.clickHandler(e)} onBlur={e=>this.handleBlur(e)}>
         <h2 id="mainmenu" styleName="visuallyhidden">Main Menu</h2>
         {this.menuGenerator(menu)}
       </nav>

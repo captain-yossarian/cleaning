@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
@@ -6,55 +5,48 @@ import CSSModules from 'react-css-modules';
 import styles from './container.scss';
 import Link from '../../global/link/link.jsx';
 
-class SimpleLink extends React.Component{
+class SimpleLink extends React.Component {
   constructor(props) {
     super(props)
-    this.state={
-      tabindex:-1
+    this.state = {
+      tabindex: -1
     }
   }
   keyHandler(e) {
-if(e.keyCode==37||e.keyCode==38||e.keyCode==39||e.keyCode==40){
-    this.setState({tabindex:-1})
-}
-
-
-
-    if(this.props.deep>0&&e.keyCode==39){
-      this.props.backToRoot('right')
-    }else if(this.props.deep==1&&e.keyCode==37){
-        this.props.backToRoot('left')
+    if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+      this.setState({tabindex: -1})
     }
-    else{
-        this.props.keyHandler(e)
-    }
-  }
-  getState(){
-    console.log('STATE',this.state.tabindex)
-  }
-  setElement(e){
-  this.props.setElement(e.target,this.props.deep)
-    this.setState({tabindex:0})
-  }
-componentWillMount(){
-    if(this.props.name=='Home'){
-      this.setState({tabindex:0})
+
+    if (this.props.deep > 0 && e.keyCode == 39) {
+      this.props.focusTo('right','root')
+    } else if (this.props.deep == 1 && e.keyCode == 37) {
+      this.props.focusTo('left','root')
+    } else {
+      this.props.keyHandler(e)
     }
   }
 
+  setElement(e) {
+    this.props.setElement(e.target, this.props.deep)
+    this.setState({tabindex: 0})
+  }
+  componentWillMount() {
+    if (this.props.name == 'Home') {
+      this.setState({tabindex: 0})
+    }
+  }
+  render() {
 
-  render(){
-
-      var {name,deep}=this.props;
-
-    return(
-      <li
-        styleName='item'
+    var {name, deep} = this.props;
+    var tabindex = deep == 0 ? this.state.tabindex : -1;
+    return (
+      <li styleName='item'
         role='none'
-        onBlur={e=>{this.getState(e)}}
-        onFocus={e=>this.setElement(e)}
-        onKeyDown={e => this.keyHandler(e)} >
-            <Link role='menuitem' aria-haspopup={false} tabIndex={deep==0?this.state.tabindex:-1}   to={name==='Home'?'/':'/'+name}>{name}</Link>
+
+        onFocus={e => this.setElement(e)}
+        onKeyDown={e => this.keyHandler(e)}>
+        <Link role='menuitem' aria-haspopup={false} tabIndex={tabindex} to={name}>{name}
+        </Link>
       </li>
     )
   }
