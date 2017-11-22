@@ -25,6 +25,15 @@ class NavigationItem {
      ? parent
      : this.rootParent(parent)
  }
+ escapeMenu(){
+   var result=this.rootParent(this.element)
+  result.children[0].focus()
+   console.log(result)
+   /**
+    * TODO fix bug, when press ESCAPE, focus Ok but tub index is '-1',must be - 0
+    * @type {Object}
+    */
+ }
 
   goTo(key) {
     var sides={
@@ -83,8 +92,8 @@ class Container extends React.Component {
       switch (e.keyCode) {
         case 13: //Enter
         case 32: //Space
-        case 40:
-        case 38:
+        case 40://Down
+        case 38://Up
           e.preventDefault();
           this.state.activeElement.openSubMenu();
           break;
@@ -133,6 +142,10 @@ class Container extends React.Component {
     this.state.activeElement.focusTo(to,toRoot);
     toRoot&&this.props.onFocusExpanded()
   }
+  escapeMenu(){
+    console.log('escape menu')
+      this.state.activeElement.escapeMenu();
+  }
   openMenu(e) {
     e.preventDefault();
     this.state.activeElement.openSubMenu();
@@ -152,7 +165,8 @@ class Container extends React.Component {
         keyHandler: this.keyHandler.bind(this),
         openMenu: this.openMenu.bind(this),
         closeSubMenu: this.closeSubMenu.bind(this),
-        focusTo: this.focusTo.bind(this)
+        focusTo: this.focusTo.bind(this),
+        escapeMenu:this.escapeMenu.bind(this)
       })
     })
 

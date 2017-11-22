@@ -33,7 +33,7 @@ class SubMenu extends React.Component {
   focusHandler() {
     setTimeout(() => {
       if (this.props.onFocusExpanded && this.props.deep == 0) {
-        this.setState({expanded: true,removed:false});
+        this.setState({expanded: true,remove:false});
       }
     }, 0)
   }
@@ -46,6 +46,13 @@ class SubMenu extends React.Component {
       }
     }, 0)
   }
+keyHandler(e){
+  if(e.keyCode==27){
+    this.setState({expanded: false});
+    this.props.escapeMenu(e);
+  }
+
+}
   render() {
     var {deep, content, name, onFocusExpanded} = this.props;
     return (
@@ -57,6 +64,8 @@ class SubMenu extends React.Component {
         aria-expanded={this.state.expanded}
         onFocus={e => this.focusHandler(e)}
         onBlur={e => this.blurHandler(e)}
+            onKeyDown={e=>this.keyHandler(e)}
+
         ref={liElement => this.liElement = liElement}>
 
         <CustomLink

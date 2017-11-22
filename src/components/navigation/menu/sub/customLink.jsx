@@ -16,8 +16,11 @@ class CustomLink extends React.Component {
     this.props.setElement(e.target, this.props.deep)
     this.setState({tabindex: 0})
   }
-  showState() {console.log('THIS STATE',this.state)}
+  showState() {console.log()}
   accessibility(e, deep) {
+    if(e.keyCode==38||e.keyCode==40){
+          console.log('down')
+    }
     switch (deep) {
       case 0:
         switch (e.keyCode) {
@@ -27,7 +30,6 @@ class CustomLink extends React.Component {
           case 40: //Down
             !this.props.parentExpanded && this.props.openMenu(e);
             break;
-
         }
         break;
       default:
@@ -39,17 +41,15 @@ class CustomLink extends React.Component {
             break;
           case 37:
             break;
-          case 9:
 
-
-            break;
         }
         break;
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.parentExpanded && nextProps.removed == true) {
+    if(this.props.parentExpanded&&!this.props.expanded){
+      console.log('check')
       this.setState({
         tabindex: -1
       }, this.showState)
@@ -59,6 +59,7 @@ class CustomLink extends React.Component {
   keyHandler(e) {
     this.accessibility(e, this.props.deep)
     if (e.keyCode == 37 || e.keyCode == 39) {
+      console.log('second')
       this.setState({
         tabindex: -1
       }, this.showState)
@@ -66,13 +67,15 @@ class CustomLink extends React.Component {
     this.props.keyHandler(e)
   }
   render() {
-    var tabindex = this.props.deep == 0
-      ? this.state.tabindex
-      : -1;
+    var tabindex = this.props.deep == 0 ? this.state.tabindex : -1;
     return (
-      <a ref={anchor => this.anchor = anchor} href="#" role='menuitem' tabIndex={this.props.deep == 0
-        ? this.state.tabindex
-        : -1} onFocus={e => this.setElement(e)} onClick={e => e.preventDefault()} onKeyDown={e => this.keyHandler(e)} styleName='link'>{this.props.name}</a>
+      <a ref={anchor => this.anchor = anchor} href="#"
+        role='menuitem'
+        tabIndex={this.props.deep == 0 ? this.state.tabindex : -1}
+        onFocus={e => this.setElement(e)}
+        onClick={e => e.preventDefault()}
+        onKeyDown={e => this.keyHandler(e)}
+        styleName='link'>{this.props.name}</a>
     )
   }
 }

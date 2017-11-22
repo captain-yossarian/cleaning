@@ -31,9 +31,10 @@ class Navigation extends React.Component {
     return{
        onFocusExpanded:!prevState.onFocusExpanded
     }
-    })
+  },this.test)
   }
   test(){
+    console.log('focusExpandedMode',this.state.onFocusExpanded)
   }
   clickHandler(e){
   }
