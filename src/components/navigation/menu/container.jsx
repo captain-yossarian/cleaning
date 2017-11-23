@@ -2,78 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CSSModules from 'react-css-modules';
 import styles from './container.scss';
+import NavigationItem from './controller.js';
 
-class NavigationItem {
-  constructor(element) {
-    this.element = element;
-  }
-  setElement(element) {
-    this.element = element;
-  }
-  openSubMenu() {
-    setTimeout(() => {
-      this.element.nextElementSibling.firstChild.firstChild.focus()
-    }, 0)
-  }
-  nearestUlParent(element, parent = element.parentElement) {
-    return element.nodeName == 'UL'
-      ? element
-      : this.nearestUlParent(element.parentElement)
-  }
-  rootParent(element, parent = element.parentElement) {
-   return parent.getAttribute('deep') == 0
-     ? parent
-     : this.rootParent(parent)
- }
- escapeMenu(){
-   var result=this.rootParent(this.element)
-  result.children[0].focus()
-   console.log(result)
-   /**
-    * TODO fix bug, when press ESCAPE, focus Ok but tub index is '-1',must be - 0
-    * @type {Object}
-    */
- }
 
-  goTo(key) {
-    var sides={
-      [35]:'lastChild',
-      [36]:'firstChild'
-    }
-    this.nearestUlParent(this.element)[sides[key]].firstChild.focus()
-  }
-
-  focusFromSub(deep) {
-    if (deep == 1) {
-        this.nearestUlParent(this.element).previousElementSibling.parentElement.previousElementSibling.children[0].focus()
-    } else {
-        this.nearestUlParent(this.element).previousElementSibling.focus()
-    }
-  }
-
-  focusTo(direction,toRoot) {
-    var side = {
-      'right': 'nextElementSibling',
-      'left': 'previousElementSibling'
-    }
-    var ref =toRoot ? this.rootParent(this.element): this.element.parentElement;
-    var refSideDirection = ref[side[direction]];
-    var refParentChildren = ref.parentElement.children;
-    if (refSideDirection !== null) {
-      refSideDirection.firstChild.focus()
-    } else {
-      refParentChildren[direction == 'right'? 0 : refParentChildren.length - 1].firstChild.focus()
-    }
-  }
-}
 
 class Container extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeElement: null,
-      deep: null,
-      force: false
+      activeElement: null
     }
   }
 
@@ -92,8 +29,8 @@ class Container extends React.Component {
       switch (e.keyCode) {
         case 13: //Enter
         case 32: //Space
-        case 40://Down
-        case 38://Up
+        case 40: //Down
+        case 38: //Up
           e.preventDefault();
           this.state.activeElement.openSubMenu();
           break;
@@ -138,13 +75,16 @@ class Container extends React.Component {
     }
 
   }
-  focusTo(to,toRoot) {
-    this.state.activeElement.focusTo(to,toRoot);
-    toRoot&&this.props.onFocusExpanded()
+  focusTo(to, toRoot) {
+    this.state.activeElement.focusTo(to, toRoot);
+    toRoot && this.props.enableFocusExpanded()
   }
-  escapeMenu(){
-    console.log('escape menu')
-      this.state.activeElement.escapeMenu();
+  escapeMenu() {
+    this.props.disableFocusExpanded();
+    this.state.activeElement.escapeMenu();
+
+    console.log('disable focus expanded')
+
   }
   openMenu(e) {
     e.preventDefault();
@@ -156,8 +96,8 @@ class Container extends React.Component {
   }
 
   render() {
-    var {deep} = this.props;
-
+    var {deep,data} = this.props;
+    var rootIndex=-1;
     var result = React.Children.map(this.props.children, (child, i) => {
       return React.cloneElement(child, {
         deep: deep,
@@ -166,10 +106,11 @@ class Container extends React.Component {
         openMenu: this.openMenu.bind(this),
         closeSubMenu: this.closeSubMenu.bind(this),
         focusTo: this.focusTo.bind(this),
-        escapeMenu:this.escapeMenu.bind(this)
+        escapeMenu: this.escapeMenu.bind(this),
+        rootElement:deep==0?(rootIndex++):false,
+        rootIndex:rootIndex
       })
     })
-
     return (
       <ul deep={deep} role={deep === 0
         ? 'menubar'

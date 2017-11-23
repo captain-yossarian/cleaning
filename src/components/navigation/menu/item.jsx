@@ -12,8 +12,9 @@ class Item extends React.Component {
   constructor(props) {
     super(props)
   }
-  render() {
-    return this.props.list?<SubMenu {...this.props}/>:<SimpleLink {...this.props} />
+  render() {   
+
+    return (this.props.list?<SubMenu {...this.props}/>:<SimpleLink {...this.props} />)
   }
 }
 

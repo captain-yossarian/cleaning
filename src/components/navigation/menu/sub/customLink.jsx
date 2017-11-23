@@ -8,7 +8,8 @@ class CustomLink extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      tabindex: -1
+      tabindex: -1,
+      escape:false
     }
 
   }
@@ -18,9 +19,7 @@ class CustomLink extends React.Component {
   }
   showState() {console.log()}
   accessibility(e, deep) {
-    if(e.keyCode==38||e.keyCode==40){
-          console.log('down')
-    }
+
     switch (deep) {
       case 0:
         switch (e.keyCode) {
@@ -28,8 +27,13 @@ class CustomLink extends React.Component {
           case 32: //Space
           case 38: //Up
           case 40: //Down
-            !this.props.parentExpanded && this.props.openMenu(e);
+            !this.props.expanded && this.props.openMenu(e);
             break;
+            case 37:
+            case 39:
+            console.log('CASE LEFT/RIGHT')
+            break;
+
         }
         break;
       default:
@@ -48,18 +52,23 @@ class CustomLink extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.parentExpanded&&!this.props.expanded){
-      console.log('check')
-      this.setState({
-        tabindex: -1
-      }, this.showState)
+  //  console.clear();
+  //(nextProps.name=='Portfolio'|| nextProps.name=='Blog')&&console.log(nextProps.name,'::',nextProps)
+    if(this.props.expanded&&!this.props.focusExpandedMode ){
+      console.log('IF')
+      setTimeout(()=>{
+        this.setState({
+          tabindex: -1
+        }, this.showState)
+      })
+
     }
   }
 
   keyHandler(e) {
+    console.log('key')
     this.accessibility(e, this.props.deep)
     if (e.keyCode == 37 || e.keyCode == 39) {
-      console.log('second')
       this.setState({
         tabindex: -1
       }, this.showState)
@@ -75,7 +84,7 @@ class CustomLink extends React.Component {
         onFocus={e => this.setElement(e)}
         onClick={e => e.preventDefault()}
         onKeyDown={e => this.keyHandler(e)}
-        styleName='link'>{this.props.name}</a>
+        styleName='link'>{this.props.name}/{this.state.tabindex}</a>
     )
   }
 }

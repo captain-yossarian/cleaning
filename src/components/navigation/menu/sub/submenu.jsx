@@ -11,7 +11,7 @@ class SubMenu extends React.Component {
     this.state = {
       expanded: false,
       focusExpanded: null,
-      removed:false
+      forceTabIndex:false
     }
     this.openMenu=this.openMenu.bind(this)
   }
@@ -32,8 +32,8 @@ class SubMenu extends React.Component {
 
   focusHandler() {
     setTimeout(() => {
-      if (this.props.onFocusExpanded && this.props.deep == 0) {
-        this.setState({expanded: true,remove:false});
+      if (this.props.focusExpandedMode && this.props.deep == 0) {
+        this.setState({expanded: true});
       }
     }, 0)
   }
@@ -42,19 +42,20 @@ class SubMenu extends React.Component {
   blurHandler(e) {
     setTimeout(() => {
       if (!this.liElement.children[1].contains(document.activeElement)) {
-        this.setState({expanded: false,removed:true});
+        this.setState({expanded: false,forceTabIndex:-1});
       }
     }, 0)
   }
 keyHandler(e){
   if(e.keyCode==27){
-    this.setState({expanded: false});
-    this.props.escapeMenu(e);
+    console.log('ESCAPE')
+    this.props.escapeMenu(e)
+   this.setState({expanded: false},(e)=>this.props.escapeMenu(e));
   }
-
 }
   render() {
-    var {deep, content, name, onFocusExpanded} = this.props;
+    var {deep, content, name,focusExpandedMode,data} = this.props;
+console.log('rootElement',this.props.rootIndex)
     return (
       <li deep={deep}
         styleName={`item list ${this.state.expanded ? 'hover': 'blur'} `}
@@ -69,18 +70,21 @@ keyHandler(e){
         ref={liElement => this.liElement = liElement}>
 
         <CustomLink
-          parentExpanded={this.state.expanded}
+          expanded={this.state.expanded}
           openMenu={this.openMenu}
-          expanded={onFocusExpanded}
+          focusExpandedMode={focusExpandedMode}
+          forceTabIndex={this.state.forceTabIndex}
           name={name}
           deep={deep}
           removed={this.state.removed}
           setElement={this.props.setElement}
           keyHandler={e => this.props.keyHandler(e)}/>
 
+
           {content}
       </li>
     )
   }
 }
+
 export default CSSModules(SubMenu, styles, {allowMultiple: true})
