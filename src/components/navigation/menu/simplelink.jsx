@@ -40,7 +40,6 @@ class SimpleLink extends React.Component {
   render() {
 
     var {name, deep} = this.props;
-console.log('rootElement',this.props.rootIndex)
     var tabindex = deep == 0 ? this.state.tabindex : -1;
     return (
       <li styleName='item'

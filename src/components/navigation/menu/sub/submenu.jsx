@@ -55,7 +55,9 @@ keyHandler(e){
 }
   render() {
     var {deep, content, name,focusExpandedMode,data} = this.props;
-console.log('rootElement',this.props.rootIndex)
+    if(deep==0){
+      console.log(this.props)
+    }
     return (
       <li deep={deep}
         styleName={`item list ${this.state.expanded ? 'hover': 'blur'} `}

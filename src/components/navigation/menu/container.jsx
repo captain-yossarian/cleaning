@@ -10,7 +10,8 @@ class Container extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeElement: null
+      activeElement: null,
+      tabIndex:[0,-1,-1,-1,-1,-1]
     }
   }
 
@@ -108,7 +109,8 @@ class Container extends React.Component {
         focusTo: this.focusTo.bind(this),
         escapeMenu: this.escapeMenu.bind(this),
         rootElement:deep==0?(rootIndex++):false,
-        rootIndex:rootIndex
+        rootIndex:rootIndex,
+        tabIndex:this.state.tabIndex[rootIndex]
       })
     })
     return (
