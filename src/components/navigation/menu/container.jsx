@@ -10,9 +10,41 @@ class Container extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeElement: null
+      activeElement: null,
+      tabindex: [
+      0,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+    ]
     }
   }
+  changeTabindex(index, direction) {
+    console.log('changeTabindex')
+   var lastElement=this.state.tabindex.length - 1;
+   var move={
+     37:(index)=>index==0?lastElement:index-1,
+     39:(index)=>index==lastElement?0:index+1,
+     'force':(index)=>index
+   }
+   var  next=move[direction](index);
+   var tabindex = [
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1
+   ];
+   tabindex[next] = 0;
+
+   this.setState({tabindex: tabindex},this.showState)
+ }
+ showState(){
+   console.log('this.state.tabindex',this.state.tabindex)
+ }
 
   setElement(element, deep) {
     this.setState({activeElement: new NavigationItem(element), deep: deep})
@@ -107,8 +139,10 @@ class Container extends React.Component {
         closeSubMenu: this.closeSubMenu.bind(this),
         focusTo: this.focusTo.bind(this),
         escapeMenu: this.escapeMenu.bind(this),
-        rootElement:deep==0?(rootIndex++):false,
-        rootIndex:rootIndex
+        rootElement:deep==0?(rootIndex+=1):false,
+        rootIndex:rootIndex,
+        tabindex: this.state.tabindex[rootIndex],
+        changeTabindex: this.changeTabindex.bind(this)
       })
     })
     return (

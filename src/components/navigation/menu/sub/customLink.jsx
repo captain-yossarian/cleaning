@@ -8,16 +8,15 @@ class CustomLink extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      tabindex: -1,
-      escape:false
+      tabindex: -1
     }
 
   }
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
-    this.setState({tabindex: 0})
+    console.log('setElement')
+    this.props.changeTabindex(this.props.rootElement,'force')
   }
-  showState() {console.log()}
   accessibility(e, deep) {
 
     switch (deep) {
@@ -51,40 +50,23 @@ class CustomLink extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-  //  console.clear();
-  //(nextProps.name=='Portfolio'|| nextProps.name=='Blog')&&console.log(nextProps.name,'::',nextProps)
-    if(this.props.expanded&&!this.props.focusExpandedMode ){
-      console.log('IF')
-      setTimeout(()=>{
-        this.setState({
-          tabindex: -1
-        }, this.showState)
-      })
-
-    }
-  }
-
   keyHandler(e) {
-    console.log('key')
-    this.accessibility(e, this.props.deep)
-    if (e.keyCode == 37 || e.keyCode == 39) {
-      this.setState({
-        tabindex: -1
-      }, this.showState)
-    }
-    this.props.keyHandler(e)
+    var {rootElement,deep}=this.props;
+      var isElementRoot = rootElement !== false;
+      (e.keyCode == 37 || e.keyCode == 39) && isElementRoot && this.props.changeTabindex(rootElement, e.keyCode)
+      this.accessibility(e, deep)
+      this.props.keyHandler(e)
   }
   render() {
-    var tabindex = this.props.deep == 0 ? this.state.tabindex : -1;
+    var tabindex = this.props.deep == 0 ? this.props.tabindex : -1;
     return (
       <a ref={anchor => this.anchor = anchor} href="#"
         role='menuitem'
-        tabIndex={this.props.deep == 0 ? this.state.tabindex : -1}
+        tabIndex={tabindex}
         onFocus={e => this.setElement(e)}
         onClick={e => e.preventDefault()}
         onKeyDown={e => this.keyHandler(e)}
-        styleName='link'>{this.props.name}/{this.state.tabindex}</a>
+        styleName='link'>{this.props.name}/{this.props.tabindex}</a>
     )
   }
 }

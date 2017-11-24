@@ -13,9 +13,12 @@ class SimpleLink extends React.Component {
     }
   }
   keyHandler(e) {
-    if (e.keyCode == 37 || e.keyCode == 39 ) {
-      this.setState({tabindex: -1})
-    }
+    if (e.keyCode == 37 || e.keyCode == 39) {
+       if (this.props.rootElement !== false) {
+         console.log(this.props)
+         this.props.changeTabindex(this.props.rootElement, e.keyCode)
+       }
+     }
 
 
     if (this.props.deep > 0 && e.keyCode == 39) {
@@ -39,17 +42,17 @@ class SimpleLink extends React.Component {
 
   render() {
 
-    var {name, deep} = this.props;
-console.log('rootElement',this.props.rootIndex)
-    var tabindex = deep == 0 ? this.state.tabindex : -1;
+    var {name, deep, rootElement} = this.props;
+     var tabindex = rootElement === false
+       ? -1
+       : this.props.tabindex;
     return (
       <li styleName='item'
         role='none'
         deep={deep}
-
         onFocus={e => this.setElement(e)}
         onKeyDown={e => this.keyHandler(e)}>
-        <Link role='menuitem' aria-haspopup={false} tabIndex={tabindex} to={name}>{name}/{this.state.tabindex}
+        <Link role='menuitem' aria-haspopup={false} tabIndex={tabindex} to={name}>{name}/{this.props.tabindex}
         </Link>
       </li>
     )
