@@ -8,50 +8,32 @@ import Link from '../../global/link/link.jsx';
 class SimpleLink extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      tabindex: -1
-    }
+
   }
   keyHandler(e) {
-    if (e.keyCode == 37 || e.keyCode == 39) {
-       if (this.props.rootElement !== false) {
-         console.log(this.props)
-         this.props.changeTabindex(this.props.rootElement, e.keyCode)
-       }
-     }
-
-
-    if (this.props.deep > 0 && e.keyCode == 39) {
-      this.props.focusTo('right','root')
-    } else if (this.props.deep == 1 && e.keyCode == 37) {
-      this.props.focusTo('left','root')
-    } else {
-      this.props.keyHandler(e)
-    }
+    /* Keyboard Support for Submenu, only for non-container link
+     If focus is on an item that does not have a submenu:*/
+    this.props.deep > 0 && e.keyCode == 39
+    /*Closes submenu.Moves focus to next item in the menubar.
+    * Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.*/
+      ? this.props.focusTo('right', 'root')
+      /*if item is on the root level,look at container.jsx for root level cases */
+      : this.props.keyHandler(e, this.props.rootElement)
   }
 
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
-    this.setState({tabindex: 0})
-  }
-  componentWillMount() {
-    if (this.props.name == 'Home') {
-      this.setState({tabindex: 0})
-    }
+    this.props.changeTabindex(this.props.rootElement, 'force')
   }
 
   render() {
 
     var {name, deep, rootElement} = this.props;
-     var tabindex = rootElement === false
-       ? -1
-       : this.props.tabindex;
+    var tabindex = rootElement === false
+      ? -1
+      : this.props.tabindex;
     return (
-      <li styleName='item'
-        role='none'
-        deep={deep}
-        onFocus={e => this.setElement(e)}
-        onKeyDown={e => this.keyHandler(e)}>
+      <li styleName='item' role='none' deep={deep} onFocus={e => this.setElement(e)} onKeyDown={e => this.keyHandler(e)}>
         <Link role='menuitem' aria-haspopup={false} tabIndex={tabindex} to={name}>{name}/{this.props.tabindex}
         </Link>
       </li>

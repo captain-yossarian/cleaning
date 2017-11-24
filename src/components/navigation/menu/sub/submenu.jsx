@@ -38,20 +38,12 @@ class SubMenu extends React.Component {
   blurHandler(e) {
     setTimeout(() => {
       if (!this.liElement.children[1].contains(document.activeElement)) {
-        this.setState({expanded: false,forceTabIndex:-1});
+        this.setState({expanded: false});
       }
     }, 0)
   }
-keyHandler(e){
-  if(e.keyCode==27){
-    console.log('ESCAPE')
-  //  this.props.escapeMenu(e)
-  // this.setState({expanded: false},(e)=>this.props.escapeMenu(e));
-  }
-}
   render() {
     var {deep, content, name,focusExpandedMode,tabindex,rootElement,keyHandler,setElement} = this.props;
-    console.log('submenu tabindex',tabindex)
       var css=this.state.expanded ? 'hover': 'blur';
     return (
       <li deep={deep}
@@ -62,7 +54,6 @@ keyHandler(e){
         aria-expanded={this.state.expanded}
         onFocus={e => this.focusHandler(e)}
         onBlur={e => this.blurHandler(e)}
-        onKeyDown={e=>this.keyHandler(e)}
         ref={liElement => this.liElement = liElement}>
 
         <CustomLink
@@ -75,7 +66,9 @@ keyHandler(e){
           rootElement={rootElement}
           changeTabindex={this.props.changeTabindex}
           setElement={setElement}
-          keyHandler={e => this.props.keyHandler(e)}/>
+          focusTo={this.props.focusTo}
+          keyHandler={(e,element) => this.props.keyHandler(e,element)}
+          toFirstElementInSubMenu={(code)=>this.props.toFirstElementInSubMenu(code)}/>
 
 
           {content}

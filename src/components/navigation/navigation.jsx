@@ -35,18 +35,20 @@ class Navigation extends React.Component {
     }, this.turnedOn)
   }
 
-  shouldComponentUpdate(nextState,nextProps){
-  if(this.state.focusExpandedMode!==nextState.focusExpandedMode){
-      return true
-    }
 
-  }
 
   disableFocusExpanded() {
-    this.setState({
-      focusExpandedMode: false
-    }, this.turnedOff)
+    this.setState(prevState=>{
+      if(!prevState.focusExpandedMode){
+        return false
+      }else{
+        return {
+          focusExpandedMode: false
+        }
+      }
+    },this.turnedOff)
   }
+
 
   turnedOn() {
     console.log('%cFocusExpandedMode turned ON', "color:green")
@@ -54,6 +56,9 @@ class Navigation extends React.Component {
 
   turnedOff() {
     console.log('%cFocusExpandedMode turned OFF', "color:red")
+  }
+  keyHandler(e){
+
   }
   clickHandler(e) {}
   menuGenerator(menu, deep = -1) {
@@ -63,8 +68,8 @@ class Navigation extends React.Component {
     return (
       <Container deep={deep} enableFocusExpanded={this.enableFocusExpanded} disableFocusExpanded={this.disableFocusExpanded}>
         {menu.map((elem, index) => elem.sub
-          ? <Item key={index}  focusExpandedMode={this.state.focusExpandedMode} content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
-          : <Item key={index}   deep={deep} name={elem.name}/>)}
+          ? <Item key={index}  focusExpandedMode={this.state.focusExpandedMode} disableFocusExpanded={this.disableFocusExpanded} content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
+          : <Item key={index}  disableFocusExpanded={this.disableFocusExpanded} deep={deep} name={elem.name}/>)}
       </Container>
 
     )
@@ -74,7 +79,7 @@ class Navigation extends React.Component {
 
     return (
       <div>
-        <nav role='navigation' aria-labelledby="mainmenu" onClick={e => this.clickHandler(e)} onBlur={e => this.handleBlur(e)}>
+        <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>this.keyHandler(e)} onClick={e => this.clickHandler(e)} onBlur={e => this.handleBlur(e)}>
           <h2 id="mainmenu" styleName="visuallyhidden">Main Menu</h2>
           {this.menuGenerator(menu)}
         </nav>
