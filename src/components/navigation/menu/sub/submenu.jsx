@@ -67,10 +67,8 @@ class SubMenu extends React.Component {
           changeTabindex={this.props.changeTabindex}
           setElement={setElement}
           focusTo={this.props.focusTo}
-          keyHandler={(e,element) => this.props.keyHandler(e,element)}
+          globalKeyboardSupport={(e,element) => this.props.globalKeyboardSupport(e,element)}
           toFirstElementInSubMenu={(code)=>this.props.toFirstElementInSubMenu(code)}/>
-
-
           {content}
       </li>
     )

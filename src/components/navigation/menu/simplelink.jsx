@@ -10,6 +10,7 @@ class SimpleLink extends React.Component {
     super(props)
 
   }
+
   keyHandler(e) {
     /* Keyboard Support for Submenu, only for non-container link
      If focus is on an item that does not have a submenu:*/
@@ -18,11 +19,12 @@ class SimpleLink extends React.Component {
     * Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.*/
       ? this.props.focusTo('right', 'root')
       /*if item is on the root level,look at container.jsx for root level cases */
-      : this.props.keyHandler(e, this.props.rootElement)
+      : this.props.globalKeyboardSupport(e, this.props.rootElement)
   }
 
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
+    /*change tabindex onfocus event*/
     this.props.changeTabindex(this.props.rootElement, 'force')
   }
 

@@ -10,6 +10,7 @@ class CustomLink extends React.Component {
   }
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
+    /*change tabindex onfocus event*/
     this.props.changeTabindex(this.props.rootElement,'force')
   }
   accessibility(e, deep) {
@@ -55,7 +56,7 @@ class CustomLink extends React.Component {
     var {rootElement,deep}=this.props;
       var isElementRoot = rootElement !== false;
       this.accessibility(e, deep)
-      this.props.keyHandler(e,this.props.rootElement)
+      this.props.globalKeyboardSupport(e,this.props.rootElement)
   }
   render() {
     var tabindex = this.props.deep == 0 ? this.props.tabindex : -1;

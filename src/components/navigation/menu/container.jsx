@@ -10,14 +10,7 @@ class Container extends React.Component {
     this.state = {
       activeElement: null,
       deep: null,
-      tabindex: [
-        0,
-        -1,
-        -1,
-        -1,
-        -1,
-        -1
-      ]
+      tabindex: [0,-1,-1,-1,-1,-1]
     }
   }
   changeTabindex(index, direction) {
@@ -50,12 +43,14 @@ class Container extends React.Component {
   setElement(element, deep) {
     this.setState({activeElement: new NavigationItem(element), deep: deep})
   }
-  keyHandler(e, element) {
+  /**
+   * Global Keyboard Support
+   */
+  globalKeyboardSupport(e, element) {
     var side = code => code == 37 || code == 38
       ? 'left'
       : 'right';
     /**
-     * Keyboard Support, Menubar, root level
      * Moves focus to first/last item in the menubar.
      * Do not depend on deep level
      */
@@ -137,13 +132,14 @@ class Container extends React.Component {
   }
 
   render() {
+    console.log('activeElement',this.state.activeElement)
     var {deep, data} = this.props;
     var rootIndex = -1;
     var result = React.Children.map(this.props.children, (child, i) => {
       return React.cloneElement(child, {
         deep: deep,
         setElement: this.setElement.bind(this),
-        keyHandler: this.keyHandler.bind(this),
+        globalKeyboardSupport: this.globalKeyboardSupport.bind(this),
         openMenu: this.openMenu.bind(this),
         focusTo: this.focusTo.bind(this),
         rootElement: deep == 0

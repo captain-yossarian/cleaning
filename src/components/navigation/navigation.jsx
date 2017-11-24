@@ -11,32 +11,23 @@ import Item from './menu/item.jsx';
 /**
  * https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html#
  * https://www.w3.org/TR/wai-aria-practices/#menu
- * TODO
- * Escape/Home/End logic
- *
+ * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets
  */
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       focusExpandedMode: false
+      
     }
-    this.iterator=-1;
     this.disableFocusExpanded = this.disableFocusExpanded.bind(this)
     this.enableFocusExpanded = this.enableFocusExpanded.bind(this)
   }
-  increment(){
-    return this.iterator++;
-  }
-
   enableFocusExpanded() {
     this.setState(prevState => {
       return {focusExpandedMode: true}
     }, this.turnedOn)
   }
-
-
-
   disableFocusExpanded() {
     this.setState(prevState=>{
       if(!prevState.focusExpandedMode){
@@ -48,38 +39,39 @@ class Navigation extends React.Component {
       }
     },this.turnedOff)
   }
-
-
   turnedOn() {
     console.log('%cFocusExpandedMode turned ON', "color:green")
   }
-
   turnedOff() {
     console.log('%cFocusExpandedMode turned OFF', "color:red")
   }
-  keyHandler(e){
 
-  }
-  clickHandler(e) {}
+  /**
+   * This function generates menubar (valid HTML)
+   *
+   * My answer on stackoverflow for clean html ----> https://stackoverflow.com/questions/9362446/how-can-i-recursively-create-a-ul-lis-from-json-data-multiple-layers-deep/46586351#46586351
+   * @param  {[object]} menu     TypeScript: interface Menu { name: string; sub?:{name:string}[]}, only this format is valid
+   * @param  {Number} deep       [deep of nested DOMnode]
+   * @return {[HTMLElement]}    [UL element with recursively nested UL]
+   */
   menuGenerator(menu, deep = -1) {
-  //  this.addRoot()
     deep += 1;
-
     return (
       <Container deep={deep} enableFocusExpanded={this.enableFocusExpanded} disableFocusExpanded={this.disableFocusExpanded}>
         {menu.map((elem, index) => elem.sub
-          ? <Item key={index}  focusExpandedMode={this.state.focusExpandedMode} disableFocusExpanded={this.disableFocusExpanded} content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
-          : <Item key={index}  disableFocusExpanded={this.disableFocusExpanded} deep={deep} name={elem.name}/>)}
+          ? <Item key={index}  focusExpandedMode={this.state.focusExpandedMode} content={this.menuGenerator(elem.sub, deep)} name={elem.name} list/>
+          : <Item key={index}  deep={deep} name={elem.name}/>)}
       </Container>
-
     )
   }
-  handleBlur() {}
   render() {
-
     return (
       <div>
-        <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e=>this.keyHandler(e)} onClick={e => this.clickHandler(e)} onBlur={e => this.handleBlur(e)}>
+        <nav
+          role='navigation'
+          aria-labelledby="mainmenu"
+          onClick={e => this.clickHandler(e)}
+          >
           <h2 id="mainmenu" styleName="visuallyhidden">Main Menu</h2>
           {this.menuGenerator(menu)}
         </nav>
