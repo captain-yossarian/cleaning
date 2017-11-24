@@ -11,16 +11,15 @@ class SubMenu extends React.Component {
     this.state = {
       expanded: false
     }
-    this.openMenu=this.openMenu.bind(this)
+    this.openMenu = this.openMenu.bind(this)
   }
   toggleState(e) {
     e.stopPropagation();
-      this.setState(prevState => {
-        return {
-          expanded: !prevState.expanded
-        }
-      })
-
+    this.setState(prevState => {
+      return {
+        expanded: !prevState.expanded
+      }
+    })
   }
   openMenu(e) {
     e.preventDefault();
@@ -43,33 +42,23 @@ class SubMenu extends React.Component {
     }, 0)
   }
   render() {
-    var {deep, content, name,focusExpandedMode,tabindex,rootElement,keyHandler,setElement} = this.props;
-      var css=this.state.expanded ? 'hover': 'blur';
+    var {
+      deep,
+      content,
+      name,
+      focusExpandedMode,
+      tabindex,
+      rootElement,
+      keyHandler,
+      setElement
+    } = this.props;
+    var css = this.state.expanded
+      ? 'hover'
+      : 'blur';
     return (
-      <li deep={deep}
-        styleName={`item list ${css} `}
-        onClick={e => this.toggleState(e)}
-        role='menuitem'
-        aria-haspopup={true}
-        aria-expanded={this.state.expanded}
-        onFocus={e => this.focusHandler(e)}
-        onBlur={e => this.blurHandler(e)}
-        ref={liElement => this.liElement = liElement}>
+      <li deep={deep} styleName={`item list ${css} `} onClick={e => this.toggleState(e)} role='menuitem' aria-haspopup={true} aria-expanded={this.state.expanded} onFocus={e => this.focusHandler(e)} onBlur={e => this.blurHandler(e)} ref={liElement => this.liElement = liElement}>
 
-        <CustomLink
-          expanded={this.state.expanded}
-          openMenu={this.openMenu}
-          focusExpandedMode={focusExpandedMode}
-          name={name}
-          deep={deep}
-          tabindex={tabindex}
-          rootElement={rootElement}
-          changeTabindex={this.props.changeTabindex}
-          setElement={setElement}
-          focusTo={this.props.focusTo}
-          globalKeyboardSupport={(e,element) => this.props.globalKeyboardSupport(e,element)}
-          toFirstElementInSubMenu={(code)=>this.props.toFirstElementInSubMenu(code)}/>
-          {content}
+        <CustomLink expanded={this.state.expanded} openMenu={this.openMenu} focusExpandedMode={focusExpandedMode} name={name} deep={deep} tabindex={tabindex} rootElement={rootElement} changeTabindex={this.props.changeTabindex} setElement={setElement} focusTo={this.props.focusTo} globalKeyboardSupport={(e, element) => this.props.globalKeyboardSupport(e, element)} toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/> {content}
       </li>
     )
   }

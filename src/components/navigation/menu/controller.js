@@ -20,17 +20,6 @@ export default class NavigationItem {
       ? parent
       : this.rootParent(parent)
   }
-  escapeMenu() {
-    var result = this.nearestUlParent(this.element)
-    result.previousElementSibling.focus()
-    console.log(this.element)
-    //result.children[0].focus()
-    /**
-    * TODO fix bug, when press ESCAPE, focus Ok but tub index is '-1',must be - 0
-    * @type {Object}
-    */
-  }
-
   goTo(key) {
     var sides = {
       [35]: 'lastChild',

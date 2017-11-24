@@ -11,6 +11,7 @@ class Header extends React.PureComponent {
     super(props);
   }
   render() {
+
     return (
       <header styleName='header'>
         <Navigation/>

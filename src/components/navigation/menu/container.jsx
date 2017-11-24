@@ -132,7 +132,6 @@ class Container extends React.Component {
   }
 
   render() {
-    console.log('activeElement',this.state.activeElement)
     var {deep, data} = this.props;
     var rootIndex = -1;
     var result = React.Children.map(this.props.children, (child, i) => {

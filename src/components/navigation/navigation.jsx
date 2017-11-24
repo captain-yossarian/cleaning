@@ -7,8 +7,16 @@ import PropTypes from 'prop-types';
 import {menu} from './menu.js';
 import Container from './menu/container.jsx';
 import Item from './menu/item.jsx';
+import Wrapper from '../wrapper.js';
+
+/*TODO
+Hoist activeElement to Navigation component, because every container component creates own activeElement!!!
+Or I need to implement redux state for navigation.
+*/
+
 
 /**
+ * Useful links
  * https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html#
  * https://www.w3.org/TR/wai-aria-practices/#menu
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets
@@ -18,7 +26,6 @@ class Navigation extends React.Component {
     super(props);
     this.state = {
       focusExpandedMode: false
-      
     }
     this.disableFocusExpanded = this.disableFocusExpanded.bind(this)
     this.enableFocusExpanded = this.enableFocusExpanded.bind(this)
@@ -65,6 +72,7 @@ class Navigation extends React.Component {
     )
   }
   render() {
+    console.log('Navigation',this.props)
     return (
       <div>
         <nav
@@ -81,4 +89,4 @@ class Navigation extends React.Component {
   }
 }
 
-export default CSSModules(Navigation, styles)
+export default Wrapper(Navigation, styles)

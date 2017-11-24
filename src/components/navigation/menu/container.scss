@@ -45,14 +45,13 @@
         left: 100%;
         top: 0;
         transform: translateX(10px);
-
         &::after {
           content: '';
           width: 10px;
           height: 100%;
           top: 0;
           position: absolute;
-          right: 10px;
+          left: -10px;
         }
       }
     }
