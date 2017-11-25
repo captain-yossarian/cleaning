@@ -58,7 +58,7 @@ class CustomLink extends React.Component {
     var {rootElement,deep}=this.props;
       var isElementRoot = rootElement !== false;
       this.accessibility(e, deep)
-      this.props.globalKeyboardSupport(e,this.props.rootElement)
+      this.props.globalKeyboardSupport(e)
   }
   render() {
     var tabindex = this.props.deep == 0 ? this.props.tabindex : -1;

@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CSSModules from 'react-css-modules';
 import styles from './container.scss';
-
+/**
+TODO
+remove this component
+*/
 
 class Container extends React.Component {
   constructor(props) {

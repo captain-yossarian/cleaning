@@ -10,10 +10,6 @@ import Wrapper from '../wrapper.js';
 import NavigationItem from './menu/controller.ts';
 import SubMenu from './menu/sub/submenu.jsx';
 import SimpleLink from './menu/simplelink.jsx';
-/*TODO
-Hoist activeElement to Navigation component, because every container component creates own activeElement!!!
-Or I need to implement redux state for navigation.
-*/
 
 /**
  * Useful links
@@ -21,6 +17,10 @@ Or I need to implement redux state for navigation.
  * https://www.w3.org/TR/wai-aria-practices/#menu
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets
  */
+ /**
+  * This is the 'container' component
+  *TODO  Do I need to bind it with Redux?
+  */
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
@@ -57,12 +57,26 @@ class Navigation extends React.Component {
       this.unbindElementToGarbageCollector()
     }
   }
+  /*
+   * If root manu does not contains activeElement(:focus),
+   * this.state.activeElement sending to garbage collector,
+   * other words,we reset the state on 'Tab' press
+   */
   unbindElementToGarbageCollector() {
-    this.setState({focusExpandedMode: false, activeElement: null, deep: null},this.showState)
+    this.setState({
+      focusExpandedMode: false,
+      activeElement: null,
+      deep: null
+    }, this.showState)
   }
   showState() {
     console.log('showState', this.state)
   }
+  /**
+   * @param {[number]} index [array index of root nav element]
+   * @param {[number]}  [e.keyCode]
+   * @return {void}
+   */
   changeTabindex(index, direction) {
     var lastElement = this.state.tabindex.length - 1;
     var move = {
@@ -81,8 +95,11 @@ class Navigation extends React.Component {
   }
   /**
    * Global Keyboard Support
+   * This logic will aplly for all component
+   * @param {[event]} e [event from callback]
+   * @return {void}
    */
-  globalKeyboardSupport(e, element) {
+  globalKeyboardSupport(e) {
     var side = code => code == 37 || code == 38
       ? 'left'
       : 'right';
@@ -149,10 +166,12 @@ class Navigation extends React.Component {
         break;
     }
   }
+  /*Focus on first/last element in UL*/
   toFirstElementInSubMenu(code) {
     console.log('toFirstElementInSubMenu', code)
     this.state.activeElement.toFirstElementInSubMenu(code)
   }
+  /*Focus to left/right/up/down*/
   focusTo(to, toRoot) {
     this.state.activeElement.focusTo(to, toRoot);
     /*if toRoot is truthy, we activate mode which open the menu on focus (root menuitem)*/
@@ -161,6 +180,11 @@ class Navigation extends React.Component {
   openMenu(e) {
     this.state.activeElement.openSubMenu();
   }
+  /* If you switch out from non-list element you will enable this mode
+   * If focus is on an item that does not have a submenu:Closes submenu.
+   * Moves focus to next item in the menubar.
+   * Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
+   * */
   enableFocusExpanded() {
     this.setState(prevState => {
       return {focusExpandedMode: true}
@@ -182,12 +206,12 @@ class Navigation extends React.Component {
     console.log('%cFocusExpandedMode turned OFF', "color:red")
   }
   /**
-   * This function generates menubar (valid HTML)
-   *
-   * My answer on stackoverflow for clean html ----> https://stackoverflow.com/questions/9362446/how-can-i-recursively-create-a-ul-lis-from-json-data-multiple-layers-deep/46586351#46586351
+   * This function generates menubar (valid HTML)   *
+   * My answer on stackoverflow for clean html
+   * ----> https://stackoverflow.com/questions/9362446/how-can-i-recursively-create-a-ul-lis-from-json-data-multiple-layers-deep/46586351#46586351
    * @param  {[object:Menu[]]} menu     TypeScript: interface Menu { name: string; sub?:Menu[]}, only this format is valid
-   * @param  {Number} deep       [deep of nested DOMnode]
-   * @return {[HTMLElement]}    [UL element with recursively nested UL]
+   * @param  {Number} deep              [deep of nested DOMnode]
+   * @return {[HTMLElement]}            [UL element with recursively nested UL]
    */
   menuGenerator(menu, deep = -1) {
     deep += 1;
@@ -218,22 +242,16 @@ class Navigation extends React.Component {
       <Container deep={deep}>
         {menu.map((elem, index) => {
           return (elem.sub
-            ? <SubMenu
-              key={index}
-              deep={deep}
-              name={elem.name}
-              content={this.menuGenerator(elem.sub, deep)}
-              focusExpandedMode={this.state.focusExpandedMode}
-              rootElement={deep == 0 ? (rootIndex += 1) : false}
-              tabindex={deep == 0 ? this.state.tabindex[rootIndex] : -1}
-              {...submenu}/>
-            : <SimpleLink
-              key={index}
-              deep={deep}
-              name={elem.name}
-              rootElement={deep == 0? (rootIndex += 1): false}
-              tabindex={deep == 0? this.state.tabindex[rootIndex]: -1}
-              {...simplelink} />)
+            ? <SubMenu key={index} deep={deep} name={elem.name} content={this.menuGenerator(elem.sub, deep)} focusExpandedMode={this.state.focusExpandedMode} rootElement={deep == 0
+                ? (rootIndex += 1)
+                : false} tabindex={deep == 0
+                ? this.state.tabindex[rootIndex]
+                : -1} {...submenu}/>
+            : <SimpleLink key={index} deep={deep} name={elem.name} rootElement={deep == 0
+              ? (rootIndex += 1)
+              : false} tabindex={deep == 0
+              ? this.state.tabindex[rootIndex]
+              : -1} {...simplelink}/>)
         })}
       </Container>
     )
@@ -241,11 +259,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <div>
-        <nav
-          role='navigation'
-          aria-labelledby="mainmenu"
-          onKeyDown={e => this.keyHandler(e)}
-          onClick={e => this.clickHandler(e)}>
+        <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>
           <h2 id="mainmenu" styleName="visuallyhidden">
             Main Menu
           </h2>
