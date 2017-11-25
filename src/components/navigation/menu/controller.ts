@@ -1,5 +1,6 @@
 export default class NavigationItem {
-  constructor(element) {
+  element: any/*HTMLAnchorElement*/;
+  constructor(element: any) {
     this.element = element;
   }
   setElement(element) {
@@ -15,12 +16,12 @@ export default class NavigationItem {
       ? element
       : this.nearestUlParent(element.parentElement)
   }
-  rootParent(element, parent = element.parentElement) {
+  rootParent(element, parent = element.parentElement){
     return parent.getAttribute('deep') == 0
       ? parent
       : this.rootParent(parent)
   }
-  goTo(key) {
+  goTo(key: number) {
     var sides = {
       [35]: 'lastChild',
       [36]: 'firstChild'
@@ -28,24 +29,25 @@ export default class NavigationItem {
     this.nearestUlParent(this.element)[sides[key]].firstChild.focus()
   }
 
-  focusFromSub(deep,code) {
-    var element=this.nearestUlParent(this.element).previousElementSibling;
-    deep==1?element.parentElement.previousElementSibling.firstChild.focus():element.focus();
+  focusFromSub(deep: number, code: number) {
+    var element = this.nearestUlParent(this.element).previousElementSibling;
+    deep == 1 ? element.parentElement.previousElementSibling.firstChild.focus() : element.focus();
   }
-  toFirstElementInSubMenu(code){
-    var child=[40,13,32].some(el=>el==code)?'firstChild':'lastChild';
+  toFirstElementInSubMenu(code: number) {
+    console.log('toFirstElementInSubMenu')
+    var child = [40, 13, 32].some(el => el == code) ? 'firstChild' : 'lastChild';
     this.element.nextElementSibling[child].firstChild.focus()
   }
 
-  focusTo(direction, toRoot) {
+  focusTo(direction: string, toRoot: string) {
     var side = {
       'right': 'nextElementSibling',
       'left': 'previousElementSibling',
-      'same':'parentElement'
+      'same': 'parentElement'
     }
     var ref = toRoot ? this.rootParent(this.element) : this.element.parentElement;
     var refSideDirection = ref[side[direction]];
-    if(direction =='same'){
+    if (direction == 'same') {
       ref.firstChild.focus();
       return;
     }
@@ -56,4 +58,5 @@ export default class NavigationItem {
       refParentChildren[direction == 'right' ? 0 : refParentChildren.length - 1].firstChild.focus()
     }
   }
+
 }

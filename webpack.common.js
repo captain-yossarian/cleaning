@@ -6,13 +6,13 @@ var BUILD_DIR = path.resolve(__dirname, './dist');
 
 var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
-
 module.exports = {
   entry: {
     main: [
       "babel-polyfill", APP_DIR + '/index.jsx'
     ]
   },
+   devtool: 'inline-source-map',
   output: {
     path: BUILD_DIR,
     filename: '[name].app.js',
@@ -81,9 +81,14 @@ module.exports = {
             presets: [
               'env', 'react'
             ],
-            plugins: ["syntax-dynamic-import","lodash"]
+            plugins: ["syntax-dynamic-import", "lodash"]
           }
         }
+      }, {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        include:APP_DIR,
+        exclude: /node_modules/
       }, {
         test: /\.(jpg|png|svg)$/,
         include: APP_DIR,
@@ -98,6 +103,9 @@ module.exports = {
         loader: 'file-loader'
       }
     ]
+  },
+  resolve:{
+    extensions: [ '.tsx', '.ts', '.js' ]
   },
   /*Lodash plugin does not work korectly, bug with _.filter, new LodashModuleReplacementPlugin()
    *github issue=> https://github.com/gajus/react-css-modules/issues/131*/

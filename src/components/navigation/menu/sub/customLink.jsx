@@ -9,9 +9,10 @@ class CustomLink extends React.Component {
     super(props)
   }
   setElement(e) {
+    console.log('setElement customlink')
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.changeTabindex(this.props.rootElement,'force')
+    this.props.rootElement!==false?this.props.changeTabindex(this.props.rootElement, 'force'):false;
   }
   accessibility(e, deep) {
     var side=code=>code==37||code==38 ? 'left':'right';
@@ -32,6 +33,7 @@ class CustomLink extends React.Component {
           e.preventDefault();
             !this.props.expanded && this.props.openMenu(e);
             this.props.expanded && this.props.toFirstElementInSubMenu(e.keyCode);
+
             break;
         }
         break;
@@ -61,8 +63,10 @@ class CustomLink extends React.Component {
   render() {
     var tabindex = this.props.deep == 0 ? this.props.tabindex : -1;
     return (
-      <a ref={anchor => this.anchor = anchor} href="#"
+      <a  href="#"
         role='menuitem'
+        aria-haspopup={true}
+        aria-expanded={this.props.expanded}
         tabIndex={tabindex}
         onFocus={e => this.setElement(e)}
         onClick={e => e.preventDefault()}

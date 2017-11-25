@@ -36,6 +36,7 @@ class SubMenu extends React.Component {
   }
   blurHandler(e) {
     setTimeout(() => {
+      /*if UL nested element does not contains activeElement (:focus), menu will collapse*/
       if (!this.liElement.children[1].contains(document.activeElement)) {
         this.setState({expanded: false});
       }
@@ -50,15 +51,35 @@ class SubMenu extends React.Component {
       tabindex,
       rootElement,
       keyHandler,
-      setElement
+      setElement,
+      changeTabindex,focusTo
     } = this.props;
     var css = this.state.expanded
       ? 'hover'
       : 'blur';
     return (
-      <li deep={deep} styleName={`item list ${css} `} onClick={e => this.toggleState(e)} role='menuitem' aria-haspopup={true} aria-expanded={this.state.expanded} onFocus={e => this.focusHandler(e)} onBlur={e => this.blurHandler(e)} ref={liElement => this.liElement = liElement}>
-
-        <CustomLink expanded={this.state.expanded} openMenu={this.openMenu} focusExpandedMode={focusExpandedMode} name={name} deep={deep} tabindex={tabindex} rootElement={rootElement} changeTabindex={this.props.changeTabindex} setElement={setElement} focusTo={this.props.focusTo} globalKeyboardSupport={(e, element) => this.props.globalKeyboardSupport(e, element)} toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/> {content}
+      <li
+        deep={deep}
+        styleName={`item list ${css} `}
+        onClick={e => this.toggleState(e)}
+        role='none'
+        onFocus={e => this.focusHandler(e)}
+        onBlur={e => this.blurHandler(e)}
+        ref={liElement => this.liElement = liElement}>
+        <CustomLink
+          expanded={this.state.expanded}
+          openMenu={this.openMenu}
+          focusExpandedMode={focusExpandedMode}
+          name={name}
+          deep={deep}
+          tabindex={tabindex}
+          rootElement={rootElement}
+          changeTabindex={changeTabindex}
+          setElement={setElement}
+          focusTo={focusTo}
+          globalKeyboardSupport={(e, element) => this.props.globalKeyboardSupport(e, element)}
+          toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/>
+          {content}
       </li>
     )
   }

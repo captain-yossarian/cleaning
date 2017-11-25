@@ -8,9 +8,7 @@ import Link from '../../global/link/link.jsx';
 class SimpleLink extends React.Component {
   constructor(props) {
     super(props)
-
   }
-
   keyHandler(e) {
     /* Keyboard Support for Submenu, only for non-container link
      If focus is on an item that does not have a submenu:*/
@@ -21,19 +19,14 @@ class SimpleLink extends React.Component {
       /*if item is on the root level,look at container.jsx for root level cases */
       : this.props.globalKeyboardSupport(e, this.props.rootElement)
   }
-
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.changeTabindex(this.props.rootElement, 'force')
+    this.props.rootElement!==false?this.props.changeTabindex(this.props.rootElement, 'force'):false;
   }
-
   render() {
-
     var {name, deep, rootElement} = this.props;
-    var tabindex = rootElement === false
-      ? -1
-      : this.props.tabindex;
+    var tabindex = rootElement === false  ? -1  : this.props.tabindex;
     return (
       <li styleName='item' role='none' deep={deep} onFocus={e => this.setElement(e)} onKeyDown={e => this.keyHandler(e)}>
         <Link role='menuitem' aria-haspopup={false} tabIndex={tabindex} to={name}>{name}/{this.props.tabindex}
