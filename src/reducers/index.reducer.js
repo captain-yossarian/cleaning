@@ -3,6 +3,6 @@ import cartReducer from './cart.reducer.js';
 
 
 const rootReducer=combineReducers({
-  cart:cartReducer
+  navState:cartReducer
 });
 export default rootReducer;

@@ -1,3 +1,4 @@
+/*
 import {ADD_TO_CART} from '../constans';
 import {addToCart} from './addToCart.js';
 
@@ -24,3 +25,4 @@ describe('Actions::addToCart', () => {
     expect(addToCart('Ukrainian salo 5kg',5,1000)).toEqual(expected)
   });
 });
+*/

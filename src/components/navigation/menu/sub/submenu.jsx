@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from '../container.scss';
 import CustomLink from './customLink.jsx';
-
+/**
+TODO
+refactor this code with destructure
+*/
 class SubMenu extends React.Component {
   constructor(props) {
     super(props)

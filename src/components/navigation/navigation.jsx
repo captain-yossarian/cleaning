@@ -17,7 +17,7 @@ import SimpleLink from './menu/simplelink.jsx';
  * https://www.w3.org/TR/wai-aria-practices/#menu
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets
  */
- /**
+/**
   * This is the 'container' component
   *TODO  Do I need to bind it with Redux?
   */
@@ -27,8 +27,7 @@ class Navigation extends React.Component {
     this.state = {
       focusExpandedMode: false,
       activeElement: null,
-      deep: null,
-      tabindex: null
+      deep: null
     }
     this.disableFocusExpanded = this.disableFocusExpanded.bind(this);
     this.enableFocusExpanded = this.enableFocusExpanded.bind(this);
@@ -36,12 +35,10 @@ class Navigation extends React.Component {
     this.globalKeyboardSupport = this.globalKeyboardSupport.bind(this);
     this.openMenu = this.openMenu.bind(this);
     this.focusTo = this.focusTo.bind(this);
-    this.changeTabindex = this.changeTabindex.bind(this);
     this.toFirstElementInSubMenu = this.toFirstElementInSubMenu.bind(this);
     this.menuGenerator = this.menuGenerator.bind(this)
   }
   componentWillMount() {
-    console.log('component will mount')
     var tabIndexArray = Array(menu.length).fill(-1);
     tabIndexArray[0] = 0;
     this.setState({tabindex: tabIndexArray});
@@ -69,30 +66,8 @@ class Navigation extends React.Component {
       deep: null
     }, this.showState)
   }
-  showState() {
-    console.log('showState', this.state)
-  }
-  /**
-   * @param {[number]} index [array index of root nav element]
-   * @param {[number]}  [e.keyCode]
-   * @return {void}
-   */
-  changeTabindex(index, direction) {
-    var lastElement = this.state.tabindex.length - 1;
-    var move = {
-      37: (index) => index == 0
-        ? lastElement
-        : index - 1,
-      39: (index) => index == lastElement
-        ? 0
-        : index + 1,
-      'force': (index) => index
-    }
-    var next = move[direction](index);
-    var tabindex = Array(menu.length).fill(-1);
-    tabindex[next] = 0;
-    this.setState({tabindex: tabindex})
-  }
+  showState() {}
+
   /**
    * Global Keyboard Support
    * This logic will aplly for all component
@@ -168,7 +143,6 @@ class Navigation extends React.Component {
   }
   /*Focus on first/last element in UL*/
   toFirstElementInSubMenu(code) {
-    console.log('toFirstElementInSubMenu', code)
     this.state.activeElement.toFirstElementInSubMenu(code)
   }
   /*Focus to left/right/up/down*/
@@ -213,50 +187,53 @@ class Navigation extends React.Component {
    * @param  {Number} deep              [deep of nested DOMnode]
    * @return {[HTMLElement]}            [UL element with recursively nested UL]
    */
+
   menuGenerator(menu, deep = -1) {
     deep += 1;
     var rootIndex = -1;
-    var {
-      setElement,
-      globalKeyboardSupport,
-      openMenu,
-      focusTo,
-      changeTabindex,
-      toFirstElementInSubMenu
-    } = this;
-    var submenu = {
-      setElement,
-      globalKeyboardSupport,
-      openMenu,
-      focusTo,
-      changeTabindex,
-      toFirstElementInSubMenu
-    };
+    var {setElement, globalKeyboardSupport, openMenu, focusTo, toFirstElementInSubMenu} = this;
     var simplelink = {
       setElement,
       globalKeyboardSupport,
-      focusTo,
-      changeTabindex
+      focusTo
     };
+    var submenu = {
+    ...simplelink,
+      openMenu,
+      toFirstElementInSubMenu
+    };
+
     return (
       <Container deep={deep}>
         {menu.map((elem, index) => {
+/*if deep == 0, increment rootIndex and get tabindex from redux*/
+          var rootElement = (() => deep == 0 ? (rootIndex += 1) : false)();
+          var tabindex=(()=>deep == 0 ? this.props.navigation.navState.tabindex[rootIndex] : -1)();
+          var same={
+            key:index,
+            name:elem.name,
+            deep,tabindex,rootElement
+          }
           return (elem.sub
-            ? <SubMenu key={index} deep={deep} name={elem.name} content={this.menuGenerator(elem.sub, deep)} focusExpandedMode={this.state.focusExpandedMode} rootElement={deep == 0
-                ? (rootIndex += 1)
-                : false} tabindex={deep == 0
-                ? this.state.tabindex[rootIndex]
-                : -1} {...submenu}/>
-            : <SimpleLink key={index} deep={deep} name={elem.name} rootElement={deep == 0
-              ? (rootIndex += 1)
-              : false} tabindex={deep == 0
-              ? this.state.tabindex[rootIndex]
-              : -1} {...simplelink}/>)
-        })}
+            ? <SubMenu
+              {...same}
+              content={this.menuGenerator(elem.sub, deep)}
+              focusExpandedMode={this.state.focusExpandedMode}
+              {...submenu}/>
+            : <SimpleLink
+              {...same}
+              {...simplelink}/>)
+        })
+}
       </Container>
     )
   }
+  shouldComponentUpdate(prevState, prevProps) {
+    console.log(prevState, prevProps)
+    return true;
+  }
   render() {
+    console.log('Navigation::render', this.props.navigation.navState)
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>
@@ -271,4 +248,4 @@ class Navigation extends React.Component {
   }
 }
 
-export default CSSModules(Navigation, styles, {allowMultiple: true})
+export default Wrapper(Navigation, styles)

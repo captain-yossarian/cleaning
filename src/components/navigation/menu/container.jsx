@@ -11,6 +11,10 @@ class Container extends React.Component {
   constructor(props) {
     super(props)
   }
+  /*Update only root container , deep==0*/
+  shouldComponentUpdate(nextProps,nextState){
+  return  nextProps.deep==0?true:false;
+  }
   render() {
     var {deep} = this.props;
     return (

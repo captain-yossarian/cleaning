@@ -4,10 +4,14 @@ import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from './container.scss';
 import Link from '../../global/link/link.jsx';
+import Wrapper  from '../../wrapper.js';
 
 class SimpleLink extends React.Component {
   constructor(props) {
     super(props)
+  }
+  shouldComponentUpdate(nextProps,nextState){
+  return  nextProps.deep==0?true:false;
   }
   keyHandler(e) {
     /* Keyboard Support for Submenu, only for non-container link
@@ -22,7 +26,7 @@ class SimpleLink extends React.Component {
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.rootElement!==false?this.props.changeTabindex(this.props.rootElement, 'force'):false;
+    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement):false;
   }
   render() {
     var {name, deep, rootElement} = this.props;
@@ -35,4 +39,4 @@ class SimpleLink extends React.Component {
     )
   }
 }
-export default CSSModules(SimpleLink, styles, {allowMultiple: true})
+export default Wrapper(SimpleLink, styles)

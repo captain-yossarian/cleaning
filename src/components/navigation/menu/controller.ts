@@ -1,28 +1,28 @@
 export default class NavigationItem {
   element: any/*HTMLAnchorElement*/;
   constructor(element: any) {
-    this.element = element;
+    this.element = element as any;
   }
-  setElement(element) {
-    this.element = element;
+  setElement(element:any) {
+    this.element  = element;
   }
-  openSubMenu() {
+  openSubMenu():void {
     setTimeout(() => {
       this.element.nextElementSibling.firstChild.firstChild.focus()
     }, 0)
   }
-  nearestUlParent(element, parent = element.parentElement) {
+  nearestUlParent(element:any, parent = element.parentElement):any{
     return element.nodeName == 'UL'
       ? element
       : this.nearestUlParent(element.parentElement)
   }
-  rootParent(element, parent = element.parentElement){
-    return parent.getAttribute('deep') == 0
+  rootParent(element:any, parent = element.parentElement):any{
+    return parent.getAttribute('deep') === '0'
       ? parent
       : this.rootParent(parent)
   }
-  goTo(key: number) {
-    var sides = {
+  goTo(key: number):void {
+    var sides:any = {
       [35]: 'lastChild',
       [36]: 'firstChild'
     }
@@ -34,19 +34,18 @@ export default class NavigationItem {
     deep == 1 ? element.parentElement.previousElementSibling.firstChild.focus() : element.focus();
   }
   toFirstElementInSubMenu(code: number) {
-    console.log('toFirstElementInSubMenu')
-    var child = [40, 13, 32].some(el => el == code) ? 'firstChild' : 'lastChild';
+    var child:string = [40, 13, 32].some(el => el == code) ? 'firstChild' : 'lastChild';
     this.element.nextElementSibling[child].firstChild.focus()
   }
 
   focusTo(direction: string, toRoot: string) {
-    var side = {
+    var side:any = {
       'right': 'nextElementSibling',
       'left': 'previousElementSibling',
       'same': 'parentElement'
     }
-    var ref = toRoot ? this.rootParent(this.element) : this.element.parentElement;
-    var refSideDirection = ref[side[direction]];
+    var ref:any = toRoot ? this.rootParent(this.element) : this.element.parentElement;
+    var refSideDirection:any = ref[side[direction]];
     if (direction == 'same') {
       ref.firstChild.focus();
       return;

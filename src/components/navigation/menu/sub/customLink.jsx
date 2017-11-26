@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from './customlink.scss';
+import Wrapper  from '../../../wrapper.js';
 
 class CustomLink extends React.Component {
   constructor(props) {
     super(props)
   }
   setElement(e) {
-    console.log('setElement customlink')
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.rootElement!==false?this.props.changeTabindex(this.props.rootElement, 'force'):false;
+    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement):false;
+  }
+  shouldComponentUpdate(nextProps,nextState){
+  return  nextProps.deep==0?true:false;
   }
   accessibility(e, deep) {
     var side=code=>code==37||code==38 ? 'left':'right';
@@ -53,12 +56,15 @@ class CustomLink extends React.Component {
         break;
     }
   }
-
   keyHandler(e) {
     var {rootElement,deep}=this.props;
       var isElementRoot = rootElement !== false;
       this.accessibility(e, deep)
       this.props.globalKeyboardSupport(e)
+  }
+  clickHandler(e){
+    e.preventDefault();
+    this.props.rovingTabindex(this.props.rootElement,'force')
   }
   render() {
     var tabindex = this.props.deep == 0 ? this.props.tabindex : -1;
@@ -69,11 +75,11 @@ class CustomLink extends React.Component {
         aria-expanded={this.props.expanded}
         tabIndex={tabindex}
         onFocus={e => this.setElement(e)}
-        onClick={e => e.preventDefault()}
+        onClick={e => this.clickHandler(e)}
         onKeyDown={e => this.keyHandler(e)}
         styleName='link'>{this.props.name}/{this.props.tabindex}</a>
     )
   }
 }
 
-export default CSSModules(CustomLink, styles, {allowMultiple: true})
+export default Wrapper(CustomLink, styles)

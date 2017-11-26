@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
  */
 function mapStateToProps (state) {
   return {
-    cart: state
+    navigation: state
   }
 }
 

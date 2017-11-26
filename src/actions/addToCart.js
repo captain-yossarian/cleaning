@@ -1,10 +1,10 @@
 
-import {ADD_TO_CART} from '../constans';
+import {CHANGE_TABINDEX} from '../constans';
 
 
-export function addToCart(product,quantity,unitCost){
+export function rovingTabindex(index,direction){
   return{
-    type:ADD_TO_CART,
-    payload:{product,quantity,unitCost}
+    type:CHANGE_TABINDEX,
+    payload:{index,direction}
   }
 }
