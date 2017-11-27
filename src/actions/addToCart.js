@@ -1,10 +1,17 @@
 
-import {CHANGE_TABINDEX} from '../constans';
+import {CHANGE_TABINDEX,SET_TO_ACTIVE} from '../constans';
 
 
-export function rovingTabindex(index,direction){
+export function rovingTabindex(index){
   return{
     type:CHANGE_TABINDEX,
-    payload:{index,direction}
+    payload:{index}
+  }
+}
+export function setToActiveElement(coordinates){
+  console.log("ACTION",coordinates)
+  return{
+    type:SET_TO_ACTIVE,
+    payload:{coordinates}
   }
 }

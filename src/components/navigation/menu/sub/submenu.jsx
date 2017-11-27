@@ -55,7 +55,7 @@ class SubMenu extends React.Component {
       rootElement,
       keyHandler,
       setElement,
-      changeTabindex,focusTo
+      focusTo,coordinates
     } = this.props;
     var css = this.state.expanded
       ? 'hover'
@@ -75,9 +75,9 @@ class SubMenu extends React.Component {
           focusExpandedMode={focusExpandedMode}
           name={name}
           deep={deep}
+          coordinates={coordinates}
           tabindex={tabindex}
           rootElement={rootElement}
-          changeTabindex={changeTabindex}
           setElement={setElement}
           focusTo={focusTo}
           globalKeyboardSupport={(e) => this.props.globalKeyboardSupport(e)}

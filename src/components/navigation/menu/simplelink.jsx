@@ -26,14 +26,16 @@ class SimpleLink extends React.Component {
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement):false;
+    this.props.rootElement?this.props.rovingTabindex(this.props.rootElement):false;
+    this.props.setToActiveElement(this.props.coordinates)
+
   }
   render() {
-    var {name, deep, rootElement} = this.props;
-    var tabindex = rootElement === false  ? -1  : this.props.tabindex;
+    var {name, deep, rootElement,tabindex} = this.props;
+
     return (
       <li styleName='item' role='none' deep={deep} onFocus={e => this.setElement(e)} onKeyDown={e => this.keyHandler(e)}>
-        <Link role='menuitem' aria-haspopup={false} tabIndex={tabindex} to={name}>{name}/{this.props.tabindex}
+        <Link role='menuitem' aria-haspopup={false} tabIndex={deep==0?tabindex:-1} to={name}>{name}/{tabindex}
         </Link>
       </li>
     )

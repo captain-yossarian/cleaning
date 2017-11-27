@@ -1,11 +1,16 @@
-export var menu = [
+ var menu = [
   {
-    name: 'Home'
-
+    name: 'Home',
+    tabindex:0,
+    id:0
   }, {
-    name: 'About'
+    name: 'About',
+    tabindex:-1,
+    id:1
   }, {
     name: 'Portfolio',
+    tabindex:-1,
+    id:2,
     sub: [
       {
         name: 'first'
@@ -34,14 +39,20 @@ export var menu = [
     ]
   }, {
     name: 'Blog',
+    tabindex:-1,
+    id:3,
     sub:[
       {name:'kiwi'},
       {name:'banana'}
     ]
   }, {
-    name: 'Contacts'
+    name: 'Contacts',
+    tabindex:-1,
+    id:4
   }, {
     name: 'Features',
+    tabindex:-1,
+    id:5,
     sub: [
       {
         name: 'Multipage'
@@ -71,3 +82,18 @@ export var menu = [
     ]
   }
 ]
+var generator=function(menu,deep=-1,coordinates=[]){
+  deep+=1;
+  return menu.forEach((elem,index)=>{
+    coordinates[deep]=index;
+    elem.coordinates=[...coordinates];
+    if(elem.sub){
+      coordinates=coordinates.slice(0,deep+1)
+      return generator(elem.sub,deep,coordinates)
+    }else{
+       return elem
+    }
+  })
+};
+var result=generator(menu);
+export {menu};

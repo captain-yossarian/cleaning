@@ -1,1 +1,2 @@
 export const CHANGE_TABINDEX = 'CHANGE_TABINDEX';
+export const SET_TO_ACTIVE='SET_TO_ACTIVE';

@@ -1,5 +1,4 @@
 import {benchmark} from './benchmark.js';
-import {Map,List} from 'immutable';
 
 onmessage = (msg) => {
   console.log('Worker received message',msg)

@@ -12,7 +12,8 @@ class CustomLink extends React.Component {
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement):false;
+    this.props.rootElement?this.props.rovingTabindex(this.props.rootElement):false;
+    this.props.setToActiveElement(this.props.coordinates)
   }
   shouldComponentUpdate(nextProps,nextState){
   return  nextProps.deep==0?true:false;
@@ -64,20 +65,22 @@ class CustomLink extends React.Component {
   }
   clickHandler(e){
     e.preventDefault();
-    this.props.rovingTabindex(this.props.rootElement,'force')
+    this.props.rovingTabindex(this.props.rootElement)
   }
   render() {
-    var tabindex = this.props.deep == 0 ? this.props.tabindex : -1;
+
+    var {tabindex,deep}=this.props;
     return (
       <a  href="#"
         role='menuitem'
         aria-haspopup={true}
         aria-expanded={this.props.expanded}
-        tabIndex={tabindex}
+        tabIndex={deep==0?tabindex:-1}
         onFocus={e => this.setElement(e)}
         onClick={e => this.clickHandler(e)}
         onKeyDown={e => this.keyHandler(e)}
-        styleName='link'>{this.props.name}/{this.props.tabindex}</a>
+
+        styleName='link'>{this.props.name}/{tabindex}</a>
     )
   }
 }

@@ -4,7 +4,6 @@ import CSSModules from 'react-css-modules';
 import styles from './navigation.scss';
 import PropTypes from 'prop-types';
 
-import {menu} from './menu.js';
 import Container from './menu/container.jsx';
 import Wrapper from '../wrapper.js';
 import NavigationItem from './menu/controller.ts';
@@ -15,6 +14,7 @@ import SimpleLink from './menu/simplelink.jsx';
  * Useful links
  * https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html#
  * https://www.w3.org/TR/wai-aria-practices/#menu
+ * Roving technique:
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets
  */
 /**
@@ -38,11 +38,7 @@ class Navigation extends React.Component {
     this.toFirstElementInSubMenu = this.toFirstElementInSubMenu.bind(this);
     this.menuGenerator = this.menuGenerator.bind(this)
   }
-  componentWillMount() {
-    var tabIndexArray = Array(menu.length).fill(-1);
-    tabIndexArray[0] = 0;
-    this.setState({tabindex: tabIndexArray});
-  }
+
   setElement(element, deep) {
     this.setState({
       activeElement: new NavigationItem(element),
@@ -64,10 +60,8 @@ class Navigation extends React.Component {
       focusExpandedMode: false,
       activeElement: null,
       deep: null
-    }, this.showState)
+    })
   }
-  showState() {}
-
   /**
    * Global Keyboard Support
    * This logic will aplly for all component
@@ -206,16 +200,17 @@ class Navigation extends React.Component {
     return (
       <Container deep={deep}>
         {menu.map((elem, index) => {
-/*if deep == 0, increment rootIndex and get tabindex from redux*/
-          var rootElement = (() => deep == 0 ? (rootIndex += 1) : false)();
-          var tabindex=(()=>deep == 0 ? this.props.navigation.navState.tabindex[rootIndex] : -1)();
           var same={
             key:index,
             name:elem.name,
-            deep,tabindex,rootElement
+            tabindex:elem.tabindex,
+            rootElement:elem.id,
+            coordinates:elem.coordinates,
+            deep
           }
           return (elem.sub
             ? <SubMenu
+
               {...same}
               content={this.menuGenerator(elem.sub, deep)}
               focusExpandedMode={this.state.focusExpandedMode}
@@ -229,23 +224,21 @@ class Navigation extends React.Component {
     )
   }
   shouldComponentUpdate(prevState, prevProps) {
-    console.log(prevState, prevProps)
     return true;
   }
   render() {
-    console.log('Navigation::render', this.props.navigation.navState)
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>
           <h2 id="mainmenu" styleName="visuallyhidden">
             Main Menu
           </h2>
-          {this.menuGenerator(menu)}
+          {this.menuGenerator(this.props.navigation.navState.menu)}
         </nav>
         <a href="#">TEST</a>
       </div>
     )
   }
 }
-
-export default Wrapper(Navigation, styles)
+var NavigationWrapper=Wrapper(Navigation, styles);
+export default NavigationWrapper;
