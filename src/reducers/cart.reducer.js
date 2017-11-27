@@ -2,9 +2,27 @@ import {CHANGE_TABINDEX, SET_TO_ACTIVE} from '../constans';
 import {menu} from './menu.js';
 import {fromJS} from 'immutable';
 
-var freeze=fromJS(menu);
-console.log('freeze',freeze)
-console.log('menu', menu)
+function deepFreeze (o) {
+  Object.freeze(o);
+
+  Object.getOwnPropertyNames(o).forEach(function (prop) {
+    if (o.hasOwnProperty(prop)
+    && o[prop] !== null
+    && (typeof o[prop] === "object" || typeof o[prop] === "function")
+    && !Object.isFrozen(o[prop])) {
+      deepFreeze(o[prop]);
+    }
+  });
+
+  return o;
+};
+var menuu=[
+	{name:'one'},
+	{name:'two',sub:[{
+		name:'three'
+	}]}
+]
+
 // /https://codepen.io/SerhiiBIlyk/pen/eeLObL?editors=0012
 
 export const initialState = {
@@ -17,19 +35,17 @@ export const initialState = {
 }
 var changeTabIndex = function(index, menu) {
   var lastElement = 6/*magic number*/;
-  var tmpMenu = [...menu];
-  var zeroIndex = tmpMenu.findIndex(el => {
+  var zeroIndex = menu.findIndex(el => {
     return el.tabindex == 0
   });
-  tmpMenu[zeroIndex].tabindex = -1;
+  menu[zeroIndex].tabindex = -1;
   tmpMenu[index].tabindex = 0;
-  return tmpMenu;
+  return menu;
 }
 function findBy(menu, coordinates) {
 
   if (coordinates.length > 1) {
-    var [index,
-      ...rest] = coordinates;
+    var [index,...rest] = coordinates;
     return findBy(menu[index].sub, rest)
   } else if (coordinates.length == 1) {
     var index = coordinates[0];
@@ -38,17 +54,18 @@ function findBy(menu, coordinates) {
   return menu[index]
 }
 const cartReducer = function(state = initialState, action) {
+  var freeze=deepFreeze(state);
   switch (action.type) {
     case CHANGE_TABINDEX:
       {
         var {index} = action.payload;
-        var newMenu = changeTabIndex(index, state.menu);
+        var newMenu = changeTabIndex(index, [...state.menu]);
         return {menu: newMenu}
       }
       break;
     case SET_TO_ACTIVE:
       {
-        var newMenu = [...menu];
+        var newMenu = [...state.menu];
         var currElement = findBy(newMenu, action.payload.coordinates);
         console.log('currElement', currElement)
         return {menu: newMenu,current: action.payload.coordinates}
