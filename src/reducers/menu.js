@@ -1,16 +1,17 @@
- var menu = [
+
+var menu = [
   {
     name: 'Home',
-    tabindex:0,
-    id:0
+    tabindex: 0,
+    id: 0
   }, {
     name: 'About',
-    tabindex:-1,
-    id:1
+    tabindex: -1,
+    id: 1
   }, {
     name: 'Portfolio',
-    tabindex:-1,
-    id:2,
+    tabindex: -1,
+    id: 2,
     sub: [
       {
         name: 'first'
@@ -23,36 +24,43 @@
         sub: [
           {
             name: 'second'
-          },
-          {
-            name:'second',
-            sub:[
-              {name:'third'},
-              {name:'third',
-            sub:[
-              {name:'fourth'}
-            ]}
+          }, {
+            name: 'second',
+            sub: [
+              {
+                name: 'third'
+              }, {
+                name: 'third',
+                sub: [
+                  {
+                    name: 'fourth'
+                  }
+                ]
+              }
             ]
-        }
+          }
         ]
       }
     ]
   }, {
     name: 'Blog',
-    tabindex:-1,
-    id:3,
-    sub:[
-      {name:'kiwi'},
-      {name:'banana'}
+    tabindex: -1,
+    id: 3,
+    sub: [
+      {
+        name: 'kiwi'
+      }, {
+        name: 'banana'
+      }
     ]
   }, {
     name: 'Contacts',
-    tabindex:-1,
-    id:4
+    tabindex: -1,
+    id: 4
   }, {
     name: 'Features',
-    tabindex:-1,
-    id:5,
+    tabindex: -1,
+    id: 5,
     sub: [
       {
         name: 'Multipage'
@@ -83,17 +91,18 @@
   }
 ]
 var generator=function(menu,deep=-1,coordinates=[]){
-  deep+=1;
-  return menu.forEach((elem,index)=>{
-    coordinates[deep]=index;
-    elem.coordinates=[...coordinates];
-    if(elem.sub){
-      coordinates=coordinates.slice(0,deep+1)
-      return generator(elem.sub,deep,coordinates)
-    }else{
-       return elem
-    }
-  })
+ deep+=1;
+ return menu.forEach((elem,index)=>{
+     //console.log('SUB',coordinates,elem.name,deep)
+   coordinates[deep]=index;
+   elem.coordinates=[...coordinates];
+   if(elem.sub){
+     var newCoordinates=coordinates.slice(0,deep+1);
+     return generator(elem.sub,deep,newCoordinates)
+   }else{
+      return elem
+   }
+ })
 };
-var result=generator(menu);
+var result = generator(menu);
 export {menu};

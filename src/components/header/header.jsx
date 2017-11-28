@@ -30,9 +30,12 @@ class Header extends React.PureComponent {
     return (
       <header styleName='header'>
         <NavigationWrapper/>
-        <p style={{'marginTop':'50px'}}>WebWorker test!</p>
-        <button id='click' onClick={e => this.clickHandler(e)}>With Worker</button>
-        <button onClick={e => this.withoutWorker(e)}>Without worker</button>
+        {/*WebWorker
+          <p style={{'marginTop':'50px'}}>WebWorker test!</p>
+          <button id='click' onClick={e => this.clickHandler(e)}>With Worker</button>
+          <button onClick={e => this.withoutWorker(e)}>Without worker</button>
+          */}
+
       </header>
     )
   }

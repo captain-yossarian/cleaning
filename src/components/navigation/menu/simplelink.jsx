@@ -10,9 +10,11 @@ class SimpleLink extends React.Component {
   constructor(props) {
     super(props)
   }
+  /*
   shouldComponentUpdate(nextProps,nextState){
   return  nextProps.deep==0?true:false;
   }
+  */
   keyHandler(e) {
     /* Keyboard Support for Submenu, only for non-container link
      If focus is on an item that does not have a submenu:*/
@@ -26,13 +28,18 @@ class SimpleLink extends React.Component {
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.rootElement?this.props.rovingTabindex(this.props.rootElement):false;
-    this.props.setToActiveElement(this.props.coordinates)
+      console.log('hover',this.props.rootElement,this.props.coordinates)
+    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false;
 
   }
+
+  shouldComponentUpdate(nextProps){
+    //console.log('STATE:',nextState,'\nPROPS::',nextProps)
+    return (this.props.tabindex!==nextProps.tabindex)?true:false;
+  }
+
   render() {
     var {name, deep, rootElement,tabindex} = this.props;
-
     return (
       <li styleName='item' role='none' deep={deep} onFocus={e => this.setElement(e)} onKeyDown={e => this.keyHandler(e)}>
         <Link role='menuitem' aria-haspopup={false} tabIndex={deep==0?tabindex:-1} to={name}>{name}/{tabindex}

@@ -45,6 +45,13 @@ class SubMenu extends React.Component {
       }
     }, 0)
   }
+  shouldComponentUpdate(nextProps,nextState){
+    return(
+      (this.state.expanded!==nextState.expanded)
+      ||(this.props.tabindex!==nextProps.tabindex)
+      ?true:false
+    )
+  }
   render() {
     var {
       deep,

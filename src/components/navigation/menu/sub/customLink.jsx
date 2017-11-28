@@ -12,12 +12,13 @@ class CustomLink extends React.Component {
   setElement(e) {
     this.props.setElement(e.target, this.props.deep)
     /*change tabindex onfocus event*/
-    this.props.rootElement?this.props.rovingTabindex(this.props.rootElement):false;
-    this.props.setToActiveElement(this.props.coordinates)
+    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false;
   }
+
   shouldComponentUpdate(nextProps,nextState){
   return  nextProps.deep==0?true:false;
   }
+
   accessibility(e, deep) {
     var side=code=>code==37||code==38 ? 'left':'right';
     /**
@@ -65,7 +66,6 @@ class CustomLink extends React.Component {
   }
   clickHandler(e){
     e.preventDefault();
-    this.props.rovingTabindex(this.props.rootElement)
   }
   render() {
 
