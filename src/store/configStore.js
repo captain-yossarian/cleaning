@@ -9,7 +9,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 function configureStore() {
 
-  var store = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger)))
+  var store = createStore(rootReducer/*, composeWithDevTools(applyMiddleware(logger))*/)
   return store;
 }
 

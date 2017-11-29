@@ -1,29 +1,67 @@
-import {ADD_TO_CART} from '../constans';
+import {CHANGE_TABINDEX} from '../constans';
+import {menu} from './menu.js';
+
+function deepFreeze(o) {
+  Object.freeze(o);
+  Object.getOwnPropertyNames(o).forEach(function(prop) {
+    if (o.hasOwnProperty(prop) && o[prop] !== null && (typeof o[prop] === "object" || typeof o[prop] === "function") && !Object.isFrozen(o[prop])) {
+      deepFreeze(o[prop]);
+    }
+  });
+  return o;
+};
 
 
+// /https://codepen.io/SerhiiBIlyk/pen/eeLObL?editors=0012
 
 export const initialState = {
-  cart: [
-    {
-      product: 'bread 700g',
-      quantity: 2,
-      unitCost: 90
-    },
-    {
-      product: 'milk 500ml',
-      quantity: 1,
-      unitCost: 47
-    }
-  ]
+  menu: menu,
+  focusExpandedMode: false,
+  activeElement: null,
+  deep: null,
+  previous: null,
+  current: null
 }
- const cartReducer = function(state=initialState, action) {
+
+var changeTabIndex = function(index, menu) {
+  var lastElement = menu.length;
+  var zeroIndex = menu.findIndex(el => {
+    return el.tabindex == 0
+  });
+  menu[zeroIndex].tabindex = -1;
+  menu[index].tabindex = 0;
+  return menu;
+}
+
+function findBy(menu, coordinates) {
+  if (coordinates.length > 1) {
+    var [index,
+      ...rest] = coordinates;
+    return findBy(menu[index].sub, rest)
+  } else if (coordinates.length == 1) {
+    var index = coordinates[0];
+    return menu[index]
+  }
+  return menu[index]
+}
+const cartReducer = function(state = initialState, action) {
+  var freeze = deepFreeze(state);
+  var frozen = JSON.stringify(state);
+  var mutableState = JSON.parse(frozen);
+
   switch (action.type) {
-    case ADD_TO_CART: {
-      return {
-        ...state,
-        cart: [...state.cart, action.payload]
+    case CHANGE_TABINDEX:
+      {
+        var {index} = action.payload;
+        var newMenu = changeTabIndex(index, mutableState.menu);
+      //  var currElement = findBy(mutableState.menu, action.payload.coordinates);
+        return {
+          menu: newMenu,
+          current: action.payload.coordinates
+        }
       }
-    }
+      break;
+
     default:
       return state;
   }

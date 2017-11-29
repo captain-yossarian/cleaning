@@ -11,3 +11,20 @@
 .expanded{
   width:auto;
 }
+.main[deep='0'] {
+  color: black;
+  position: relative;
+  display: block;
+
+  & > [deep='0'] {
+    width: 16.6666%;
+    display: block;
+    display: inline-block;
+    border: 1px solid red;
+    text-align: center;
+  }
+}
+
+.container {
+  display: none;
+}
