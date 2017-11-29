@@ -10,9 +10,9 @@ class CustomLink extends React.Component {
     super(props)
   }
   setElement(e) {
-    this.props.setElement(e.target, this.props.deep)
+    this.props.setElement(e.target, this.props.deep);
     /*change tabindex onfocus event*/
-    this.props.rootElement!==false?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false;
+  (typeof this.props.rootElement==='number')?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false;
   }
 
   shouldComponentUpdate(nextProps,nextState){

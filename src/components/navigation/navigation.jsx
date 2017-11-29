@@ -203,7 +203,7 @@ class Navigation extends React.Component {
         : 'menu'} styleName={deep === 0
         ? 'main'
         : 'container'}>
-        {menu.map((elem, index) => {      
+        {menu.map((elem, index) => {
           var same = {
             key: index,
             name: elem.name,
@@ -222,7 +222,6 @@ class Navigation extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    console.log('props', nextProps)
     return this.props == nextProps
       ? false
       : true;

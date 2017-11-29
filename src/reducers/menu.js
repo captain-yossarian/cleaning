@@ -93,7 +93,6 @@ var menu = [
 var generator=function(menu,deep=-1,coordinates=[]){
  deep+=1;
  return menu.forEach((elem,index)=>{
-     //console.log('SUB',coordinates,elem.name,deep)
    coordinates[deep]=index;
    elem.coordinates=[...coordinates];
    if(elem.sub){

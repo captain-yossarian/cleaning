@@ -24,13 +24,11 @@ export const initialState = {
 }
 
 var changeTabIndex = function(index, menu) {
-  console.log('checkindex',index,menu)
   var lastElement = menu.length;
   var zeroIndex = menu.findIndex(el => {
     return el.tabindex == 0
   });
   menu[zeroIndex].tabindex = -1;
-  console.log(menu[index])
   menu[index].tabindex = 0;
   return menu;
 }
