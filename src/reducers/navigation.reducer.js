@@ -44,7 +44,7 @@ function findBy(menu, coordinates) {
   }
   return menu[index]
 }
-const cartReducer = function(state = initialState, action) {
+const navigationReducer = function(state = initialState, action) {
   var freeze = deepFreeze(state);
   var frozen = JSON.stringify(state);
   var mutableState = JSON.parse(frozen);
@@ -66,4 +66,4 @@ const cartReducer = function(state = initialState, action) {
       return state;
   }
 }
-export default cartReducer;
+export default navigationReducer;

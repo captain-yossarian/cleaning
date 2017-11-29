@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import cartReducer from './cart.reducer.js';
+import navigationReducer from './navigation.reducer.js';
 
 
 const rootReducer=combineReducers({
-  navState:cartReducer
+  navState:navigationReducer
 });
 export default rootReducer;

@@ -227,6 +227,7 @@ class Navigation extends React.Component {
       : true;
   }
   render() {
+    console.log('thisprops',this.props)
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>
