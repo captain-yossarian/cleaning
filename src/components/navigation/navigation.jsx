@@ -26,7 +26,8 @@ class Navigation extends React.Component {
     this.state = {
       focusExpandedMode: false,
       activeElement: null,
-      deep: null
+      deep: null,
+      jsonActive:null
     }
     this.disableFocusExpanded = this.disableFocusExpanded.bind(this);
     this.enableFocusExpanded = this.enableFocusExpanded.bind(this);
@@ -41,7 +42,7 @@ class Navigation extends React.Component {
   setElement(element, deep) {
     this.setState({
       activeElement: new NavigationItem(element),
-      deep: deep
+      deep: deep    
     }, this.showState)
   }
   keyHandler(e) {
@@ -108,8 +109,7 @@ class Navigation extends React.Component {
             this.state.deep == 1
               ? this.focusTo('same', 'root')
               : this.state.activeElement.focusFromSub(this.state.deep, e.keyCode);
-           this.disableFocusExpanded()
-
+            this.disableFocusExpanded();
             break;
           case 37: //Left
             this.state.deep == 1
@@ -197,12 +197,19 @@ class Navigation extends React.Component {
       toFirstElementInSubMenu
     };
 
+    var attr = ((deep) => {
+      return deep == 0
+        ? {
+          aria: 'menubar',
+          css: 'main'
+        }
+        : {
+          aria: 'menu',
+          css: 'container'
+        }
+    })(deep)
     return (
-      <ul deep={deep} role={deep === 0
-        ? 'menubar'
-        : 'menu'} styleName={deep === 0
-        ? 'main'
-        : 'container'}>
+      <ul deep={deep} role={attr.aria} styleName={attr.css}>
         {menu.map((elem, index) => {
           var same = {
             key: index,
@@ -210,13 +217,14 @@ class Navigation extends React.Component {
             tabindex: elem.tabindex,
             rootElement: elem.id,
             coordinates: elem.coordinates,
+            rovingTabindex: this.props.rovingTabindex,
             deep
           }
           return (elem.sub
             ? <SubMenu {...same} content={this.menuGenerator(elem.sub, deep)} focusExpandedMode={this.state.focusExpandedMode} {...submenu}/>
             : <SimpleLink {...same} {...simplelink}/>)
         })
-        }
+}
       </ul>
     )
   }
@@ -227,7 +235,7 @@ class Navigation extends React.Component {
       : true;
   }
   render() {
-    console.log('thisprops',this.props)
+    console.log('thisprops', this.props)
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>

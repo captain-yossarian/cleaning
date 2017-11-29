@@ -1,5 +1,16 @@
 import {CHANGE_TABINDEX} from '../constans';
 import {menu} from './menu.js';
+import { Map } from 'immutable';
+
+
+
+const map1 = Map({ a: 1, b: 2, c: 3 })
+const result=map1.map((el,i)=>{
+  console.log(el);
+  return el;
+})
+
+
 
 function deepFreeze(o) {
   Object.freeze(o);

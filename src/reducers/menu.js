@@ -104,4 +104,16 @@ var generator=function(menu,deep=-1,coordinates=[]){
  })
 };
 var result = generator(menu);
+
+function moveTo(arr,current,destination){
+  console.log('moveto')
+	switch (current.length){
+		case 1:
+			console.log(current)
+			return current;
+			break;
+	}
+
+}
+moveTo(menu,[2],'left');
 export {menu};

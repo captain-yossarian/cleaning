@@ -45,12 +45,10 @@ class SubMenu extends React.Component {
       }
     }, 0)
   }
-  shouldComponentUpdate(nextProps,nextState){
-    return(
-      (this.state.expanded!==nextState.expanded)
-      ||(this.props.tabindex!==nextProps.tabindex)
-      ?true:false
-    )
+  shouldComponentUpdate(nextProps, nextState) {
+    return ((this.state.expanded !== nextState.expanded) || (this.props.tabindex !== nextProps.tabindex)
+      ? true
+      : false)
   }
   render() {
     var {
@@ -60,36 +58,39 @@ class SubMenu extends React.Component {
       focusExpandedMode,
       tabindex,
       rootElement,
-      keyHandler,
       setElement,
-      focusTo,coordinates
+      focusTo,
+      coordinates,
+      rovingTabindex
     } = this.props;
+    var settings = {
+      deep,
+      name,
+      focusExpandedMode,
+      tabindex,
+      rootElement,
+      setElement,
+      focusTo,
+      coordinates,
+      rovingTabindex
+    }
+
     var css = this.state.expanded
       ? 'hover'
       : 'blur';
     return (
-      <li
-        deep={deep}
+      <li deep={deep}
         styleName={`item list ${css} `}
         onClick={e => this.toggleState(e)}
-        role='none'
-        onFocus={e => this.focusHandler(e)}
+        role='none' onFocus={e => this.focusHandler(e)}
         onBlur={e => this.blurHandler(e)}
         ref={liElement => this.liElement = liElement}>
         <CustomLink
           expanded={this.state.expanded}
           openMenu={this.openMenu}
-          focusExpandedMode={focusExpandedMode}
-          name={name}
-          deep={deep}
-          coordinates={coordinates}
-          tabindex={tabindex}
-          rootElement={rootElement}
-          setElement={setElement}
-          focusTo={focusTo}
+          {...settings}
           globalKeyboardSupport={(e) => this.props.globalKeyboardSupport(e)}
-          toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/>
-          {content}
+          toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/> {content}
       </li>
     )
   }

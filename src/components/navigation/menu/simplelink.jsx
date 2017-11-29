@@ -46,4 +46,4 @@ class SimpleLink extends React.Component {
     )
   }
 }
-export default Wrapper(SimpleLink, styles)
+export default CSSModules(SimpleLink, styles, {allowMultiple: true})

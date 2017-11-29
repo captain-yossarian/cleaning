@@ -79,10 +79,9 @@ class CustomLink extends React.Component {
         onFocus={e => this.setElement(e)}
         onClick={e => this.clickHandler(e)}
         onKeyDown={e => this.keyHandler(e)}
-
         styleName='link'>{this.props.name}/{tabindex}</a>
     )
   }
 }
 
-export default Wrapper(CustomLink, styles)
+export default CSSModules(CustomLink, styles, {allowMultiple: true})
