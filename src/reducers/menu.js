@@ -105,15 +105,45 @@ var generator=function(menu,deep=-1,coordinates=[]){
 };
 var result = generator(menu);
 
-function moveTo(arr,current,destination){
-  console.log('moveto')
-	switch (current.length){
-		case 1:
-			console.log(current)
-			return current;
-			break;
-	}
 
+class KeyController {
+  constructor(coordinates) {
+    this.coordinates = coordinates.slice();
+    this.lastElement = this.coordinates.length - 1
+  }
+  levelUP() {
+    if (this.coordinates[this.lastElement] == 0) {
+      this.coordinates.pop();
+      return this.coordinates;
+    }
+  }
 }
-moveTo(menu,[2],'left');
+/*
+function moveTo(arr,current,destination){
+	var temporary=current.slice();
+	var lastElement=temporary.length-1;
+  switch (destination){
+    case 'left':
+    switch (true){
+      case (current.length==1):
+				var destination=[temporary[lastElement]-1];
+        return destination;
+        break;
+			case (current.length>1):
+				if(temporary[lastElement]==0){
+					temporary.pop();
+					return temporary
+				}
+				temporary[lastElement]=temporary[lastElement]-1;
+				return temporary;
+				break;
+    }
+		case 'right':
+			console.log(temporary.slice(0,1))
+
+			break;
+    break;
+  }
+}
+ */
 export {menu};

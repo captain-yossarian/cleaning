@@ -16,21 +16,13 @@ import SimpleLink from './menu/simplelink.jsx';
  * Roving technique:
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets
  */
-/**
-  * This is the 'container' component
-  *TODO  Do I need to bind it with Redux?
-  */
+
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      focusExpandedMode: false,
-      activeElement: null,
-      deep: null,
-      jsonActive:null
+      activeElement: null
     }
-    this.disableFocusExpanded = this.disableFocusExpanded.bind(this);
-    this.enableFocusExpanded = this.enableFocusExpanded.bind(this);
     this.setElement = this.setElement.bind(this);
     this.globalKeyboardSupport = this.globalKeyboardSupport.bind(this);
     this.openMenu = this.openMenu.bind(this);
@@ -39,12 +31,14 @@ class Navigation extends React.Component {
     this.menuGenerator = this.menuGenerator.bind(this)
   }
 
-  setElement(element, deep) {
+  setElement(element, deep,coordinates) {
+    this.props.assignElement(deep,coordinates);
     this.setState({
       activeElement: new NavigationItem(element),
-      deep: deep    
+      deep: deep
     }, this.showState)
   }
+
   keyHandler(e) {
     if (e.keyCode == 9) {
       this.unbindElementToGarbageCollector()
@@ -56,7 +50,7 @@ class Navigation extends React.Component {
    * other words,we reset the state on 'Tab' press
    */
   unbindElementToGarbageCollector() {
-    this.setState({focusExpandedMode: false, activeElement: null, deep: null})
+    this.setState({ activeElement: null})
   }
   /**
    * Global Keyboard Support
@@ -79,7 +73,7 @@ class Navigation extends React.Component {
         this.state.activeElement.goTo(e.keyCode);
         break;
     }
-    switch (this.state.deep) {
+    switch (this.props.navigation.navState.deep) {
         /**
        * In this case we move on the top (root) level navigation
        */
@@ -106,19 +100,19 @@ class Navigation extends React.Component {
         Moves focus to parent menubar item.
          */
           case 27: //Escape
-            this.state.deep == 1
+            this.props.navigation.navState.deep== 1
               ? this.focusTo('same', 'root')
-              : this.state.activeElement.focusFromSub(this.state.deep, e.keyCode);
+              : this.state.activeElement.focusFromSub(this.props.navigation.navState.deep, e.keyCode);
             this.disableFocusExpanded();
             break;
           case 37: //Left
-            this.state.deep == 1
+            this.props.navigation.navState.deep == 1
             /*If parent menu item is in the menubar, also:
            * -moves focus to previous item in the menubar.
            * -opens submenu of newly focused menubar item, keeping focus on that parent menubar item.*/
               ? this.focusTo('left', 'root')
               /*If submenu os deeper,Closes submenu and moves focus to parent menu item.*/
-              : this.state.activeElement.focusFromSub(this.state.deep, e.keyCode);
+              : this.state.activeElement.focusFromSub(this.props.navigation.navState.deep, e.keyCode);
             break;
           case 38:
           case 40:
@@ -139,7 +133,7 @@ class Navigation extends React.Component {
   focusTo(to, toRoot) {
     this.state.activeElement.focusTo(to, toRoot);
     /*if toRoot is truthy, we activate mode which open the menu on focus (root menuitem)*/
-    toRoot && !this.state.focusExpandedMode && this.enableFocusExpanded()
+    toRoot && !this.props.navigation.navState.focusExpandedMode && this.enableFocusExpanded()
   }
   openMenu(e) {
     this.state.activeElement.openSubMenu();
@@ -150,24 +144,36 @@ class Navigation extends React.Component {
    * Opens submenu of newly focused menubar item, keeping focus on that parent menubar item.
    * */
   enableFocusExpanded() {
-    this.setState(prevState => {
-      return {focusExpandedMode: true}
-    }, this.turnedOn)
+    this.props.switchFocusExpanded('on')
+    this.turnedOn()
   }
   disableFocusExpanded() {
-    this.setState(prevState => {
-      if (!prevState.focusExpandedMode) {
-        return false
-      } else {
-        return {focusExpandedMode: false}
-      }
-    }, this.turnedOff)
+    /*
+     TODO
+     every time if focusMode is turnedOff if I press Esc it is again turned off, fix it!
+     */
+    this.props.switchFocusExpanded('off')
+    this.turnedOff();
   }
   turnedOn() {
-    console.log('%cFocusExpandedMode turned ON', "color:green")
+  //  console.log('%cFocusExpandedMode turned ON', "color:green")
   }
   turnedOff() {
-    console.log('%cFocusExpandedMode turned OFF', "color:red")
+    //console.log('%cFocusExpandedMode turned OFF', "color:red")
+  }
+  compare(arr1, arr2) {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
+      return false;
+    }
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false
+      }
+    }
+    return true;
   }
   /**
    * This function generates menubar (valid HTML)   *
@@ -208,9 +214,12 @@ class Navigation extends React.Component {
           css: 'container'
         }
     })(deep)
+
     return (
       <ul deep={deep} role={attr.aria} styleName={attr.css}>
+
         {menu.map((elem, index) => {
+
           var same = {
             key: index,
             name: elem.name,
@@ -218,10 +227,12 @@ class Navigation extends React.Component {
             rootElement: elem.id,
             coordinates: elem.coordinates,
             rovingTabindex: this.props.rovingTabindex,
+          //  currentElement:this.compare(elem.coordinates,this.props.navigation.navState.current)?true:false,
             deep
           }
+
           return (elem.sub
-            ? <SubMenu {...same} content={this.menuGenerator(elem.sub, deep)} focusExpandedMode={this.state.focusExpandedMode} {...submenu}/>
+            ? <SubMenu {...same} content={this.menuGenerator(elem.sub, deep)} focusExpandedMode={this.props.navigation.navState.focusExpandedMode} {...submenu}/>
             : <SimpleLink {...same} {...simplelink}/>)
         })
 }
@@ -235,7 +246,6 @@ class Navigation extends React.Component {
       : true;
   }
   render() {
-    console.log('thisprops', this.props)
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>

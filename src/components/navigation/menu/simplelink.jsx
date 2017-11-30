@@ -26,7 +26,7 @@ class SimpleLink extends React.Component {
       : this.props.globalKeyboardSupport(e)
   }
   setElement(e) {
-    this.props.setElement(e.target, this.props.deep);
+    this.props.setElement(e.target, this.props.deep,this.props.coordinates);
     /*change tabindex onfocus event*/
       (typeof this.props.rootElement==='number')?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false
 

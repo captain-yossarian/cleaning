@@ -1,14 +1,14 @@
-import {CHANGE_TABINDEX} from '../constans';
+import {
+  CHANGE_TABINDEX,
+  SWITCH_FOCUS_EXPANDED_MODE,
+  ASSIGN_ELEMENT
+} from '../constans';
 import {menu} from './menu.js';
 import { Map } from 'immutable';
 
+import {result,normalizedData} from './flattenedMenu.js';
+const map1 = Map({ a: 1, b: 2, c: 3 });
 
-
-const map1 = Map({ a: 1, b: 2, c: 3 })
-const result=map1.map((el,i)=>{
-  console.log(el);
-  return el;
-})
 
 
 
@@ -30,7 +30,6 @@ export const initialState = {
   focusExpandedMode: false,
   activeElement: null,
   deep: null,
-  previous: null,
   current: null
 }
 
@@ -46,8 +45,8 @@ var changeTabIndex = function(index, menu) {
 
 function findBy(menu, coordinates) {
   if (coordinates.length > 1) {
-    var [index,
-      ...rest] = coordinates;
+    var [index, ...rest] = coordinates;
+
     return findBy(menu[index].sub, rest)
   } else if (coordinates.length == 1) {
     var index = coordinates[0];
@@ -59,22 +58,50 @@ const navigationReducer = function(state = initialState, action) {
   var freeze = deepFreeze(state);
   var frozen = JSON.stringify(state);
   var mutableState = JSON.parse(frozen);
-
   switch (action.type) {
     case CHANGE_TABINDEX:
       {
         var {index} = action.payload;
         var newMenu = changeTabIndex(index, mutableState.menu);
-      //  var currElement = findBy(mutableState.menu, action.payload.coordinates);
         return {
+          ...state,
           menu: newMenu,
           current: action.payload.coordinates
         }
       }
       break;
+      case SWITCH_FOCUS_EXPANDED_MODE:{
+        if(action.payload.turn=='on'){
+          return {
+            ...state,
 
+            focusExpandedMode:true
+          }
+        }
+        else{
+          if(state.focusExpandedMode){
+            return {
+              ...state,
+              focusExpandedMode:false
+            }
+          }else{
+            return state;
+          }
+        }
+      }
+      break;
+      case ASSIGN_ELEMENT:{
+      var current=findBy(mutableState.menu,action.payload.coordinates)
+        return {
+          ...state,
+          deep:action.payload.deep,
+          current:action.payload.coordinates
+        }
+      }
+      break;
     default:
       return state;
+      break;
   }
 }
 export default navigationReducer;
