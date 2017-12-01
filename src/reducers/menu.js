@@ -1,3 +1,69 @@
+let menuu = {
+  0: {
+    id: 0,
+		name:'zero',
+    counter: 0,
+    childIds: [1,2,3,4,5,6]
+  },
+  1: {
+    id: 1,
+		name:'one',
+    counter: 0
+  },
+  2: {
+		name:'two',
+    id: 2,
+    counter: 0
+  },
+  3: {
+    id: 3,
+		name:'three',
+    counter: 0
+  },
+  4: {
+		name:'four',
+    id: 4,
+    counter: 0,
+    childIds: [11]
+  },
+  5: {
+    id: 5,
+		name:'five',
+    counter: 0
+  },
+  6: {
+    id: 6,
+		name:'sixx',
+    counter: 0,
+    childIds: [7,8,9]
+  },
+	7:{
+		id:7,
+		name:'seven'
+	},
+	8:{
+		id:8,
+		name:'eight'
+	},
+		9:{
+		id:9,
+		name:'nine',
+		childIds:[10]
+	},
+	10:{
+		id:10,
+		name:'ten'
+	},
+		11:{
+		id:11,
+		name:'eleven',
+		childIds:[12]
+	},
+		12:{
+		id:12,
+		name:'tvelve'
+	}
+}
 
 var menu = [
   {
@@ -146,4 +212,4 @@ function moveTo(arr,current,destination){
   }
 }
  */
-export {menu};
+export {menu,menuu};

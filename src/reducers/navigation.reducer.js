@@ -3,11 +3,9 @@ import {
   SWITCH_FOCUS_EXPANDED_MODE,
   ASSIGN_ELEMENT
 } from '../constans';
-import {menu} from './menu.js';
+import {menu,menuu} from './menu.js';
 import { Map } from 'immutable';
 
-import {result,normalizedData} from './flattenedMenu.js';
-const map1 = Map({ a: 1, b: 2, c: 3 });
 
 
 
@@ -30,7 +28,8 @@ export const initialState = {
   focusExpandedMode: false,
   activeElement: null,
   deep: null,
-  current: null
+  current: null,
+  tree:menuu
 }
 
 var changeTabIndex = function(index, menu) {

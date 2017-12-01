@@ -79,4 +79,4 @@ const article = new schema.Entity('articles', {
 });
 
 const normalizedData = normalize(menu, article);
-export {result, menu,normalizedData};
+export {result, menu, normalizedData};

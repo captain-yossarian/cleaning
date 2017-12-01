@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import styles from './menu/container.scss';
 import PropTypes from 'prop-types';
 
+import Test from './test.jsx';
 import Wrapper from '../wrapper.js';
 import NavigationItem from './controller.ts';
 import SubMenu from './menu/sub/submenu.jsx';
@@ -32,7 +33,7 @@ class Navigation extends React.Component {
   }
 
   setElement(element, deep,coordinates) {
-    this.props.assignElement(deep,coordinates);
+    //this.props.assignElement(deep,coordinates);
     this.setState({
       activeElement: new NavigationItem(element),
       deep: deep
@@ -188,7 +189,8 @@ class Navigation extends React.Component {
    * @param  {Number} deep              [deep of nested DOMnode]
    * @return {[HTMLElement]}            [UL element with recursively nested UL]
    */
-  menuGenerator(menu, deep = -1) {
+  menuGenerator(menu,filter, deep = -1) {
+    console.log('filter',filter)
     deep += 1;
     var rootIndex = -1;
     var {setElement, globalKeyboardSupport, openMenu, focusTo, toFirstElementInSubMenu} = this;
@@ -213,26 +215,23 @@ class Navigation extends React.Component {
           aria: 'menu',
           css: 'container'
         }
-    })(deep)
-
+    })(deep);
     return (
       <ul deep={deep} role={attr.aria} styleName={attr.css}>
-
-        {menu.map((elem, index) => {
-
+        {filter.map((elem, index) => {
           var same = {
             key: index,
-            name: elem.name,
-            tabindex: elem.tabindex,
-            rootElement: elem.id,
-            coordinates: elem.coordinates,
+            name: menu[elem].name,
+            tabindex: menu[elem].tabindex,
+            rootElement: menu[elem].id,
+            coordinates: menu[elem].coordinates,
             rovingTabindex: this.props.rovingTabindex,
           //  currentElement:this.compare(elem.coordinates,this.props.navigation.navState.current)?true:false,
             deep
           }
 
-          return (elem.sub
-            ? <SubMenu {...same} content={this.menuGenerator(elem.sub, deep)} focusExpandedMode={this.props.navigation.navState.focusExpandedMode} {...submenu}/>
+          return (menu[elem].childIds
+            ? <SubMenu {...same} content={this.menuGenerator(this.props.navigation.navState.tree,menu[elem].childIds, deep)} focusExpandedMode={this.props.navigation.navState.focusExpandedMode} {...submenu}/>
             : <SimpleLink {...same} {...simplelink}/>)
         })
 }
@@ -245,12 +244,19 @@ class Navigation extends React.Component {
       ? false
       : true;
   }
+
   render() {
+    console.log('props',this.props.navigation.navState.tree[0].childIds)
+
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>
-          {this.menuGenerator(this.props.navigation.navState.menu)}
+          {this.menuGenerator(this.props.navigation.navState.tree,this.props.navigation.navState.tree[0].childIds)}
         </nav>
+        <div>
+          <Test id={0}/>
+
+        </div>
       </div>
     )
   }

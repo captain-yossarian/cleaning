@@ -39,7 +39,6 @@ export default class NavigationItem {
   }
 
   focusTo(direction: string, toRoot: string) {
-    console.log('focus to')
     var side: any = {
       'right': 'nextElementSibling',
       'left': 'previousElementSibling',
