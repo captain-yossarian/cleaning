@@ -32,8 +32,9 @@ class Navigation extends React.Component {
     this.menuGenerator = this.menuGenerator.bind(this)
   }
 
-  setElement(element, deep,coordinates) {
-    //this.props.assignElement(deep,coordinates);
+  setElement(element, deep,elementIndex) {
+    this.props.assignElement(deep,elementIndex);
+
     this.setState({
       activeElement: new NavigationItem(element),
       deep: deep
@@ -190,7 +191,6 @@ class Navigation extends React.Component {
    * @return {[HTMLElement]}            [UL element with recursively nested UL]
    */
   menuGenerator(menu,filter, deep = -1) {
-    console.log('filter',filter)
     deep += 1;
     var rootIndex = -1;
     var {setElement, globalKeyboardSupport, openMenu, focusTo, toFirstElementInSubMenu} = this;
@@ -224,8 +224,8 @@ class Navigation extends React.Component {
             name: menu[elem].name,
             tabindex: menu[elem].tabindex,
             rootElement: menu[elem].id,
-            coordinates: menu[elem].coordinates,
             rovingTabindex: this.props.rovingTabindex,
+            previousElement:this.props.previousElement,
           //  currentElement:this.compare(elem.coordinates,this.props.navigation.navState.current)?true:false,
             deep
           }
@@ -246,15 +246,12 @@ class Navigation extends React.Component {
   }
 
   render() {
-    console.log('props',this.props.navigation.navState.tree[0].childIds)
-
     return (
       <div>
         <nav role='navigation' aria-labelledby="mainmenu" onKeyDown={e => this.keyHandler(e)} onClick={e => this.clickHandler(e)}>
           {this.menuGenerator(this.props.navigation.navState.tree,this.props.navigation.navState.tree[0].childIds)}
         </nav>
         <div>
-          <Test id={0}/>
 
         </div>
       </div>

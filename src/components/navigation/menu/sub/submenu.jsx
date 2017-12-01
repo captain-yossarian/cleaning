@@ -60,8 +60,8 @@ class SubMenu extends React.Component {
       rootElement,
       setElement,
       focusTo,
-      coordinates,
-      rovingTabindex
+      rovingTabindex,
+      previousElement
     } = this.props;
     var settings = {
       deep,
@@ -71,8 +71,8 @@ class SubMenu extends React.Component {
       rootElement,
       setElement,
       focusTo,
-      coordinates,
-      rovingTabindex
+      rovingTabindex,
+      previousElement
     }
 
     var css = this.state.expanded

@@ -10,9 +10,9 @@ class CustomLink extends React.Component {
     super(props)
   }
   setElement(e) {
-    this.props.setElement(e.target, this.props.deep,this.props.coordinates);
+    this.props.setElement(e.target, this.props.deep,this.props.rootElement);
     /*change tabindex onfocus event*/
-  (typeof this.props.rootElement==='number')?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false;
+  (this.props.rootElement < 7)?this.props.rovingTabindex(this.props.rootElement):false;
   }
 
   shouldComponentUpdate(nextProps,nextState){
@@ -67,6 +67,13 @@ class CustomLink extends React.Component {
   clickHandler(e){
     e.preventDefault();
   }
+  blurHandler(e){
+    if(this.props.deep == 0){
+      console.log('ROOT')
+    //this.props.previousElement(this.props.rootElement)
+    }
+  }
+
   render() {
 
     var {tabindex,deep}=this.props;
@@ -79,6 +86,7 @@ class CustomLink extends React.Component {
         onFocus={e => this.setElement(e)}
         onClick={e => this.clickHandler(e)}
         onKeyDown={e => this.keyHandler(e)}
+        onBlur={e=>this.blurHandler(e)}
         styleName='link'>{this.props.name}/{tabindex}</a>
     )
   }

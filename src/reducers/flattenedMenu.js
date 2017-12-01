@@ -2,8 +2,7 @@ import { normalize, schema } from 'normalizr';
 // Define a users schema
 
 
-var menu = {
-  roots: {
+var menu = {  
     0: {
       name: 'Home',
       tabindex: 0,
@@ -17,20 +16,7 @@ var menu = {
     2: {
       name: 'Portfolio',
       tabindex: -1,
-      id: 2,
-      children: {
-        submenu:{
-          1: {
-            name: 'sub1'
-          },
-          2: {
-            name: 'sub2'
-          },
-          3: {
-            name: 'sub3'
-          }
-        }
-      }
+      id: 2
     },
     3: {
       name: 'Blog',
@@ -47,7 +33,6 @@ var menu = {
       tabindex: -1,
       id: 5
     }
-  }
 }
 function mock(state, action) {
   switch (action.type) {

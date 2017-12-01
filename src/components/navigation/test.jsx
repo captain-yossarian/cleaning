@@ -33,7 +33,6 @@ class Test extends React.Component {
     </ul>`
   }
   render() {
-    console.log(this.props.navigation.navState.tree)
     return (
       <div>
         <p>TEST</p>

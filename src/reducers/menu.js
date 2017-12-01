@@ -1,4 +1,4 @@
-let menuu = {
+let reset = {
   0: {
     id: 0,
 		name:'zero',
@@ -8,63 +8,142 @@ let menuu = {
   1: {
     id: 1,
 		name:'one',
-    counter: 0
+    tabindex:-1
   },
   2: {
 		name:'two',
     id: 2,
-    counter: 0
+    tabindex:-1
   },
   3: {
     id: 3,
 		name:'three',
-    counter: 0
+    tabindex:-1
   },
   4: {
 		name:'four',
     id: 4,
-    counter: 0,
+    tabindex:-1,
     childIds: [11]
   },
   5: {
     id: 5,
 		name:'five',
-    counter: 0
+    tabindex:-1
   },
   6: {
     id: 6,
 		name:'sixx',
-    counter: 0,
+    tabindex:-1,
     childIds: [7,8,9]
   },
 	7:{
 		id:7,
-		name:'seven'
+		name:'seven',
+    tabindex:-1
 	},
 	8:{
 		id:8,
-		name:'eight'
+		name:'eight',
+    tabindex:-1
 	},
 		9:{
 		id:9,
 		name:'nine',
-		childIds:[10]
+		childIds:[10],
+    tabindex:-1
 	},
 	10:{
 		id:10,
-		name:'ten'
+		name:'ten',
+    tabindex:-1
 	},
 		11:{
 		id:11,
 		name:'eleven',
-		childIds:[12]
+		childIds:[12],
+    tabindex:-1
 	},
 		12:{
 		id:12,
-		name:'tvelve'
+		name:'tvelve',
+    tabindex:-1
+	}
+}
+let menu = {
+  0: {
+    id: 0,
+		name:'zero',
+    counter: 0,
+    childIds: [1,2,3,4,5,6]
+  },
+  1: {
+    id: 1,
+		name:'one',
+    tabindex:0
+  },
+  2: {
+		name:'two',
+    id: 2,
+    tabindex:-1
+  },
+  3: {
+    id: 3,
+		name:'three',
+    tabindex:-1
+  },
+  4: {
+		name:'four',
+    id: 4,
+    tabindex:-1,
+    childIds: [11]
+  },
+  5: {
+    id: 5,
+		name:'five',
+    tabindex:-1
+  },
+  6: {
+    id: 6,
+		name:'sixx',
+    tabindex:-1,
+    childIds: [7,8,9]
+  },
+	7:{
+		id:7,
+		name:'seven',
+    tabindex:-1
+	},
+	8:{
+		id:8,
+		name:'eight',
+    tabindex:-1
+	},
+		9:{
+		id:9,
+		name:'nine',
+		childIds:[10],
+    tabindex:-1
+	},
+	10:{
+		id:10,
+		name:'ten',
+    tabindex:-1
+	},
+		11:{
+		id:11,
+		name:'eleven',
+		childIds:[12],
+    tabindex:-1
+	},
+		12:{
+		id:12,
+		name:'tvelve',
+    tabindex:-1
 	}
 }
 
+/*
 var menu = [
   {
     name: 'Home',
@@ -212,4 +291,4 @@ function moveTo(arr,current,destination){
   }
 }
  */
-export {menu,menuu};
+export {menu,reset};

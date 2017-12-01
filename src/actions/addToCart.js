@@ -2,14 +2,20 @@
 import {
   CHANGE_TABINDEX,
   SWITCH_FOCUS_EXPANDED_MODE,
-  ASSIGN_ELEMENT
+  ASSIGN_ELEMENT,
+  PREVIOUS_ELEMENT
 } from '../constans';
 
-
-export function rovingTabindex(index,coordinates){
+export function previousElement(prevElement){
+  return{
+    type:PREVIOUS_ELEMENT,
+    payload:{prevElement}
+  }
+}
+export function rovingTabindex(index){
   return{
     type:CHANGE_TABINDEX,
-    payload:{index,coordinates}
+    payload:{index}
   }
 }
 export function switchFocusExpanded(turn){
@@ -18,9 +24,9 @@ export function switchFocusExpanded(turn){
     payload:{turn}
   }
 }
-export function assignElement(deep,coordinates){
+export function assignElement(deep,index){
   return{
     type:ASSIGN_ELEMENT,
-    payload:{deep,coordinates}
+    payload:{deep,index}
   }
 }

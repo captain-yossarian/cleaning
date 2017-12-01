@@ -1,13 +1,20 @@
 import {
   CHANGE_TABINDEX,
   SWITCH_FOCUS_EXPANDED_MODE,
-  ASSIGN_ELEMENT
+  ASSIGN_ELEMENT,
+  PREVIOUS_ELEMENT
 } from '../constans';
-import {menu,menuu} from './menu.js';
+import {menu,reset} from './menu.js';
 import { Map } from 'immutable';
 
 
+function  zero(arg){
+  for(var prop in arg){
+  console.log('zero:',arg[prop]);
+  }
 
+}
+zero(menu)
 
 
 function deepFreeze(o) {
@@ -24,12 +31,12 @@ function deepFreeze(o) {
 // /https://codepen.io/SerhiiBIlyk/pen/eeLObL?editors=0012
 
 export const initialState = {
-  menu: menu,
   focusExpandedMode: false,
   activeElement: null,
   deep: null,
-  current: null,
-  tree:menuu
+  current:null,
+  tree:menu,
+  previous:null
 }
 
 var changeTabIndex = function(index, menu) {
@@ -55,17 +62,27 @@ function findBy(menu, coordinates) {
 }
 const navigationReducer = function(state = initialState, action) {
   var freeze = deepFreeze(state);
-  var frozen = JSON.stringify(state);
-  var mutableState = JSON.parse(frozen);
   switch (action.type) {
+    case PREVIOUS_ELEMENT:
+    var {prevElement}=action.payload;
+    return {
+      ...state,
+      previous:prevElement
+    }
+
+    break;
     case CHANGE_TABINDEX:
       {
         var {index} = action.payload;
-        var newMenu = changeTabIndex(index, mutableState.menu);
         return {
           ...state,
-          menu: newMenu,
-          current: action.payload.coordinates
+          tree:{
+            ...reset,
+            [index]:{
+              ...state.tree[index],
+              tabindex:0
+            }
+          }
         }
       }
       break;
@@ -73,7 +90,6 @@ const navigationReducer = function(state = initialState, action) {
         if(action.payload.turn=='on'){
           return {
             ...state,
-
             focusExpandedMode:true
           }
         }
@@ -90,11 +106,10 @@ const navigationReducer = function(state = initialState, action) {
       }
       break;
       case ASSIGN_ELEMENT:{
-      var current=findBy(mutableState.menu,action.payload.coordinates)
+        var {deep}=action.payload;
         return {
           ...state,
-          deep:action.payload.deep,
-          current:action.payload.coordinates
+          deep:deep
         }
       }
       break;
