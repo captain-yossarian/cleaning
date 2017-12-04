@@ -10,7 +10,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
  */
 
 function configureStore() {
-let store =process.env.NODE_ENV !== 'production' ?createStore(rootReducer, composeWithDevTools(applyMiddleware(logger))):createStore(rootReducer)
+let store =process.env.NODE_ENV !== 'production' ?createStore(rootReducer/*, composeWithDevTools(applyMiddleware(logger))*/):createStore(rootReducer)
   return store;
 }
 

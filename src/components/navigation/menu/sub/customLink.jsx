@@ -14,11 +14,9 @@ class CustomLink extends React.Component {
     /*change tabindex onfocus event*/
   (this.props.rootElement < 7)?this.props.rovingTabindex(this.props.rootElement):false;
   }
-
   shouldComponentUpdate(nextProps,nextState){
   return  nextProps.deep==0?true:false;
   }
-
   accessibility(e, deep) {
     var side=code=>code==37||code==38 ? 'left':'right';
     /**
@@ -69,12 +67,9 @@ class CustomLink extends React.Component {
   }
   blurHandler(e){
     if(this.props.deep == 0){
-      console.log('ROOT')
     }
   }
-
   render() {
-
     var {tabindex,deep}=this.props;
     return (
       <a  href="#"
@@ -90,5 +85,4 @@ class CustomLink extends React.Component {
     )
   }
 }
-
 export default CSSModules(CustomLink, styles, {allowMultiple: true})

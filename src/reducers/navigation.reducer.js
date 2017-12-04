@@ -78,7 +78,6 @@ const navigationReducer = function(state = initialState, action) {
       break;
       case ASSIGN_ELEMENT:{
         var {deep}=action.payload;
-        console.log('action',action.payload)
         return {
           ...state,
           deep:deep

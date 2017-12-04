@@ -38,13 +38,11 @@ class Navigation extends React.Component {
   }
 
   setElement(element,deep,elementIndex) {
-    console.log('setElement',element,deep,elementIndex)
     this.props.assignElement(deep,elementIndex);
-
     this.setState({
       activeElement: new NavigationItem(element),
       deep: deep
-    }, this.showState)
+    }, ()=>{console.log('setElement')})
   }
 
   keyHandler(e) {
@@ -59,7 +57,10 @@ class Navigation extends React.Component {
    */
   unbindElementToGarbageCollector() {
     this.state.activeElement.unbindToGarbageCollector();
-    this.setState({ activeElement: null})
+    this.setState({ activeElement: null},this.showState)
+  }
+  showState(){
+    console.log('garbage collector')
   }
   /**
    * Global Keyboard Support
@@ -68,7 +69,6 @@ class Navigation extends React.Component {
    * @return {void}
    */
   globalKeyboardSupport(e) {
-    console.log('navigation',e.keyCode,this.props)
     var side = code => code == 37 || code == 38
       ? 'left'
       : 'right';
@@ -92,7 +92,6 @@ class Navigation extends React.Component {
           case 37:
           case 39:
             e.preventDefault();
-            console.log('RIGHT')
             /*Moves focus to the next item in the menubar.
            *If focus is on the last item, moves focus to the first item. */
             this.state.activeElement.focusTo(side(e.keyCode));
@@ -181,7 +180,7 @@ class Navigation extends React.Component {
    * @param  {[object:Menu[]]} menu     TypeScript:
    * interface Menu {
    *  name: string;
-   *  sub?:Menu[]
+   *  childIds?:Menu[]
    *  },
    *  only this format is valid
    * @param  {Number} deep              [deep of nested DOMnode]
@@ -190,7 +189,12 @@ class Navigation extends React.Component {
   menuGenerator(menu,filter, deep = -1) {
     deep += 1;
     var rootIndex = -1;
-    var {setElement, globalKeyboardSupport, openMenu, focusTo, toFirstElementInSubMenu} = this;
+    var {
+      setElement,
+      globalKeyboardSupport,
+      openMenu,
+      focusTo,
+      toFirstElementInSubMenu} = this;
     var simplelink = {
       setElement,
       globalKeyboardSupport,
@@ -225,7 +229,7 @@ class Navigation extends React.Component {
             previousElement:this.props.previousElement,
             deep
           }
-
+          /*Check if element has  children */
           return (menu[elem].childIds
             ? <SubMenu {...same}
               content={this.menuGenerator(this.props.tree,menu[elem].childIds, deep)}
@@ -235,18 +239,20 @@ class Navigation extends React.Component {
               {...same}
               {...simplelink}/>)
         })
-}
+      }
       </ul>
     )
   }
 
   shouldComponentUpdate(nextProps) {
+    console.log('nextProps',nextProps)
     return this.props == nextProps
       ? false
       : true;
   }
 
   render() {
+    console.log('Navigation::render')
     return (
       <div>
         <nav role='navigation'
@@ -264,7 +270,6 @@ class Navigation extends React.Component {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(AppActions, dispatch);
 function mapStateToProps (state) {
-  console.log('mapStateToProps',mapStateToProps,state)
   return {
     tree:state.navState.tree,
     focusExpandedMode:state.navState.focusExpandedMode,
