@@ -11,7 +11,10 @@
       <li>jest/enzyme tests</li>
     </ul>
   </li>
-  <li><span>Accessible React navigation</span></li>
-  <li><span>According to <a href="https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html#"> WAI ARIA best practices</a></span></li>
-  <li>Roving tabindex <a href="https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex"></a>technique </li>
+  <li><span>Accessible React navigation</span>
+    <ul>
+      <li><span>According to <a href="https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html#"> WAI ARIA best practices</a></span></li>
+      <li>Roving tabindex <a href="https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex">technique</a> </li>
+    </ul>
+  </li>
 <ol>
