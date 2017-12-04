@@ -70,7 +70,6 @@ class CustomLink extends React.Component {
   blurHandler(e){
     if(this.props.deep == 0){
       console.log('ROOT')
-    //this.props.previousElement(this.props.rootElement)
     }
   }
 

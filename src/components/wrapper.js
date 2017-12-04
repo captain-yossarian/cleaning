@@ -21,8 +21,11 @@ const mapStateToProps = (state) => {
 };
  */
 function mapStateToProps (state) {
+  console.log('mapStateToProps',state)
   return {
-    navigation: state
+    tree:state.navState.tree,
+    focusExpandedMode:state.navState.focusExpandedMode,
+    deep:state.navState.deep
   }
 }
 

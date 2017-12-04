@@ -6,6 +6,10 @@ export default class NavigationItem {
   setElement(element: any) {
     this.element = element;
   }
+  unbindToGarbageCollector(){
+    this.element=null;
+  }
+
   openSubMenu(): void {
     setTimeout(() => {
       this.element.nextElementSibling.firstChild.firstChild.focus()

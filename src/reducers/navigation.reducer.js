@@ -5,16 +5,9 @@ import {
   PREVIOUS_ELEMENT
 } from '../constans';
 import {menu,reset} from './menu.js';
-import { Map } from 'immutable';
 
 
-function  zero(arg){
-  for(var prop in arg){
-  console.log('zero:',arg[prop]);
-  }
 
-}
-zero(menu)
 
 
 function deepFreeze(o) {
@@ -39,27 +32,6 @@ export const initialState = {
   previous:null
 }
 
-var changeTabIndex = function(index, menu) {
-  var lastElement = menu.length;
-  var zeroIndex = menu.findIndex(el => {
-    return el.tabindex == 0
-  });
-  menu[zeroIndex].tabindex = -1;
-  menu[index].tabindex = 0;
-  return menu;
-}
-
-function findBy(menu, coordinates) {
-  if (coordinates.length > 1) {
-    var [index, ...rest] = coordinates;
-
-    return findBy(menu[index].sub, rest)
-  } else if (coordinates.length == 1) {
-    var index = coordinates[0];
-    return menu[index]
-  }
-  return menu[index]
-}
 const navigationReducer = function(state = initialState, action) {
   var freeze = deepFreeze(state);
   switch (action.type) {
@@ -69,7 +41,6 @@ const navigationReducer = function(state = initialState, action) {
       ...state,
       previous:prevElement
     }
-
     break;
     case CHANGE_TABINDEX:
       {
@@ -107,6 +78,7 @@ const navigationReducer = function(state = initialState, action) {
       break;
       case ASSIGN_ELEMENT:{
         var {deep}=action.payload;
+        console.log('action',action.payload)
         return {
           ...state,
           deep:deep

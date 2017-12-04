@@ -1,13 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from '../container.scss';
 import CustomLink from './customLink.jsx';
-/**
-TODO
-refactor this code with destructure
-*/
+
 class SubMenu extends React.Component {
   constructor(props) {
     super(props)
@@ -74,6 +70,7 @@ class SubMenu extends React.Component {
       rovingTabindex,
       previousElement
     }
+
 
     var css = this.state.expanded
       ? 'hover'

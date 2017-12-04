@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from './container.scss';
@@ -16,6 +15,7 @@ class SimpleLink extends React.Component {
   }
   */
   keyHandler(e) {
+    console.log('LI key handler',e.target)
     /* Keyboard Support for Submenu, only for non-container link
      If focus is on an item that does not have a submenu:*/
     this.props.deep > 0 && e.keyCode == 39
@@ -26,27 +26,25 @@ class SimpleLink extends React.Component {
       : this.props.globalKeyboardSupport(e)
   }
   setElement(e) {
-    this.props.setElement(e.target, this.props.deep,this.props.rootElement);
-    /*change tabindex onfocus event*/
-      ( this.props.rootElement < 7)?this.props.rovingTabindex(this.props.rootElement):false
+      console.log('onFOCUS setElement')
 
+    this.props.setElement(e.target, this.props.deep,this.props.rootElement);
+
+    /*change tabindex onfocus event*/
+      (this.props.rootElement < 7)?this.props.rovingTabindex(this.props.rootElement):false
   }
 
   shouldComponentUpdate(nextProps){
     return (this.props.tabindex!==nextProps.tabindex)?true:false;
   }
-  blurHandler(e){
 
-  //  this.props.previousElement(this.props.rootElement)
-
-
-  }
 
   render() {
     var {name, deep, rootElement,tabindex} = this.props;
+    console.log('simplelink',this.props)
     return (
-      <li styleName='item' role='none' deep={deep} onBlur={e=>this.blurHandler(e)} onFocus={e => this.setElement(e)} onKeyDown={e => this.keyHandler(e)}>
-        <Link role='menuitem' aria-haspopup={false} tabIndex={deep==0?tabindex:-1} to={name}>{name}/{tabindex}
+      <li styleName='item' role='none' deep={deep}>
+        <Link onFocus={e=>this.setElement(e)} onKeyDown={e => this.keyHandler(e)} role='menuitem' aria-haspopup={false} tabIndex={deep==0?tabindex:-1} to={name}>{name}/{tabindex}
         </Link>
       </li>
     )

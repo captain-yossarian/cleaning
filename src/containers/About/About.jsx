@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import styles from './About.scss';
 import CSSModules from 'react-css-modules';
 

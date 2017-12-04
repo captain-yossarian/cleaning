@@ -6,15 +6,20 @@ var CompressionPlugin = require('compression-webpack-plugin');
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const webpack = require('webpack');
+
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 var APP_DIR = path.resolve(__dirname, './src');
 module.exports = merge(common, {
   devtool: 'cheap-module-source-map',
+  
   "resolve": {
      "alias": {
        "react": "preact-compat",
        "react-dom": "preact-compat"
      }
    },
+
   entry: {
 
     common: ['react', 'react-dom']
