@@ -4,7 +4,8 @@ const express = require('express');
 var compression = require('compression')
 var app = express();
 
-
+const v8 = require('v8');
+console.log('v8',v8.getHeapStatistics())
 
 app.use(compression())
 

@@ -7,26 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="preload" href="main.app.js" as="script">
-<!--
+  <!--
+    <link rel="preload" href="common.prod.app.js" as="script">
   <link rel="preload" href="common.prod.app.js" as="script">
--->
 
+-->
   <link rel='stylesheet' href='style.css' />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
 </head>
-
 <body>
 
+<script "text/javascript" src='main.app.js'></script>
   <!--
 <script "text/javascript" src='common.prod.app.js'></script>
-
-<script "text/javascript" src='common.app.js'></script>
 -->
-
-<script "text/javascript" src='main.app.js'></script>
-
-
   <script type="text/javascript">
   /*
   setTimeout(function() {
@@ -44,17 +38,8 @@
 
 var body=document.documentElement||document.body;
       body.appendChild(script2);
-
-
-
     documentFragment.appendChild(css);
-
-
-
     document.getElementsByTagName('head')[0].appendChild(documentFragment);
-
-
-
   },0)
 */
   </script>

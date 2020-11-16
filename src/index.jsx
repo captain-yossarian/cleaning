@@ -12,7 +12,6 @@ import rootReducer from './reducers/index.reducer.js';
 import {store} from './store/configStore.js';
 
 
-
 function root(nodeID) {
   const element = document.createElement('div');
   element.id = nodeID;

@@ -1,13 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from '../container.scss';
 import CustomLink from './customLink.jsx';
-/**
-TODO
-refactor this code with destructure
-*/
+
 class SubMenu extends React.Component {
   constructor(props) {
     super(props)
@@ -29,7 +25,6 @@ class SubMenu extends React.Component {
     this.toggleState(e);
     this.props.openMenu(e);
   }
-
   focusHandler() {
     setTimeout(() => {
       if (this.props.focusExpandedMode && this.props.deep == 0) {
@@ -60,8 +55,8 @@ class SubMenu extends React.Component {
       rootElement,
       setElement,
       focusTo,
-      coordinates,
-      rovingTabindex
+      rovingTabindex,
+      previousElement
     } = this.props;
     var settings = {
       deep,
@@ -71,26 +66,33 @@ class SubMenu extends React.Component {
       rootElement,
       setElement,
       focusTo,
-      coordinates,
-      rovingTabindex
+      rovingTabindex,
+      previousElement
     }
-
     var css = this.state.expanded
       ? 'hover'
       : 'blur';
+      /*
+      onFocusCapture and onBlurCapture
+      React has a non-standard behavoir.It invokes focus event on parent, it is wrong, that's why preact does not work in this way.
+      We need to avoid using focus/blur event on parent elements;
+       */
     return (
       <li deep={deep}
         styleName={`item list ${css} `}
         onClick={e => this.toggleState(e)}
-        role='none' onFocus={e => this.focusHandler(e)}
-        onBlur={e => this.blurHandler(e)}
+        role='none'
+        onFocusCapture={e=>this.focusHandler(e)}
+        onBlurCapture={e => this.blurHandler(e)}
         ref={liElement => this.liElement = liElement}>
+
         <CustomLink
           expanded={this.state.expanded}
           openMenu={this.openMenu}
           {...settings}
           globalKeyboardSupport={(e) => this.props.globalKeyboardSupport(e)}
-          toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/> {content}
+          toFirstElementInSubMenu={(code) => this.props.toFirstElementInSubMenu(code)}/>
+          {content}
       </li>
     )
   }

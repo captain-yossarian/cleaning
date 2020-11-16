@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from './container.scss';
@@ -26,21 +25,25 @@ class SimpleLink extends React.Component {
       : this.props.globalKeyboardSupport(e)
   }
   setElement(e) {
-    this.props.setElement(e.target, this.props.deep);
+    this.props.setElement(e.target, this.props.deep,this.props.rootElement);
     /*change tabindex onfocus event*/
-      (typeof this.props.rootElement==='number')?this.props.rovingTabindex(this.props.rootElement,this.props.coordinates):false
-
+      (this.props.rootElement < 7)?this.props.rovingTabindex(this.props.rootElement):false
   }
 
   shouldComponentUpdate(nextProps){
-    return (this.props.tabindex!==nextProps.tabindex)?true:false;
+    return  (this.props.tabindex!==nextProps.tabindex)?true:false;
   }
-
   render() {
+    console.log('simple link')
     var {name, deep, rootElement,tabindex} = this.props;
     return (
-      <li styleName='item' role='none' deep={deep} onFocus={e => this.setElement(e)} onKeyDown={e => this.keyHandler(e)}>
-        <Link role='menuitem' aria-haspopup={false} tabIndex={deep==0?tabindex:-1} to={name}>{name}/{tabindex}
+      <li styleName='item' role='none' deep={deep}>
+        <Link
+          onFocus={e=>this.setElement(e)}
+          onKeyDown={e => this.keyHandler(e)}
+          role='menuitem'
+          aria-haspopup={false}
+          tabIndex={deep==0?tabindex:-1} to={name}>{name}/{tabindex}
         </Link>
       </li>
     )

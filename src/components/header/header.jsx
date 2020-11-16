@@ -1,14 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import CSSModules from 'react-css-modules';
 import styles from './header.scss';
 import PropTypes from 'prop-types';
 import NavigationWrapper from '../navigation/navigation.jsx';
 import {benchmark} from './benchmark.js';
-import Worker from './worker.js';
+//import Worker from './worker.js';
 
 var arr = Array(9000000).fill(0);// 9 000 000
-const worker = new Worker();
+//const worker = new Worker();
 
 class Header extends React.PureComponent {
   constructor(props) {
@@ -16,14 +15,14 @@ class Header extends React.PureComponent {
   }
   clickHandler(e) {
     setTimeout(() => {
-        worker.postMessage([arr])
+      //  worker.postMessage([arr])
     }, 0)
 
     console.log('Message posted to worker')
   }
   withoutWorker() {
     benchmark();
-    var next = arr.map((elem, index) => elem + index)
+  //  var next = arr.map((elem, index) => elem + index)
     console.log(' end time')
   }
   render() {
